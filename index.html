@@ -348,7 +348,7 @@
   "use strict";
   var DAY=1, P=YTR.PLAYS, $=function(i){return document.getElementById(i)};
   var cv=$("cv"), c=cv.getContext("2d"), RECT=[0,0,720,820];
-  var LB_URL="", secs=0, asked=0; var i=0, res=[], raf=0, answered=false, reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var LB_URL="https://script.google.com/macros/s/AKfycbzGPdRJZk0vHKk9WJ-I07KCqWVHK5xBLxOFX213AK_PV10CoXijYS2iWLANi5TyNs5X/exec", secs=0, asked=0; var i=0, res=[], raf=0, answered=false, reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
   function dots(){$("dots").innerHTML=P.map(function(p,j){var s=res[j]===undefined?(j===i?"now":""):(res[j]?"ok":"no");return '<span class="dot '+s+'">'+p.league+'</span>'}).join("")}
   function paint(t,trail){YTR.draw(c,P[i],t,RECT,{trail:trail});var lb=P[i].league;c.font="800 24px 'Barlow Condensed', Arial, sans-serif";YTR.chip(c,lb,14+(c.measureText(lb).width+21.6)/2,32,24,"#111","#f4c430",1)}

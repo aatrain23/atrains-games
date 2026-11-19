@@ -1,12 +1,16 @@
-/* You're the Ref leaderboard. Paste into a Google Sheet's Apps Script (Extensions > Apps Script),
-   then Deploy > New deployment > Web app > Execute as: Me, Who has access: Anyone.
+/* You're the Ref leaderboard. Paste into a new project at script.google.com, run setup() once (it creates the
+   scores sheet), then Deploy > New deployment > Web app > Execute as: Me, Who has access: Anyone.
    Put the web app URL into LB_URL in index.html. */
 var TAB = 'Scores';
 function sheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet(), s = ss.getSheetByName(TAB);
+  var props = PropertiesService.getScriptProperties(), id = props.getProperty('SHEET_ID'), ss;
+  if (id) ss = SpreadsheetApp.openById(id);
+  else { ss = SpreadsheetApp.create("You're the Ref Leaderboard"); props.setProperty('SHEET_ID', ss.getId()); }
+  var s = ss.getSheetByName(TAB);
   if (!s) { s = ss.insertSheet(TAB); s.appendRow(['When', 'Day', 'Name', 'Score', 'Total', 'Seconds']); }
   return s;
 }
+function setup() { return sheet_().getParent().getUrl(); }
 function board_(day) {
   var rows = sheet_().getDataRange().getValues().slice(1), today = [], all = {};
   rows.forEach(function (r) {
