@@ -33,6 +33,7 @@
   .verdict h2{font-family:var(--display);font-weight:800;font-size:28px;line-height:1;margin:0 0 6px;text-transform:uppercase}
   .verdict p{margin:0 0 8px}
   .law{color:var(--yellow);font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.5px;text-transform:uppercase}
+  #clip{color:var(--yellow);font-weight:600;text-underline-offset:3px}
   .twist{color:var(--muted);font-size:15px}
   .primary{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:.6px;text-transform:uppercase;background:var(--yellow);color:#1a1606;border-radius:12px;padding:13px 18px;width:100%;margin-top:6px}
   .big{font-family:var(--display);font-weight:800;font-size:84px;line-height:.9;font-variant-numeric:tabular-nums}
@@ -70,6 +71,7 @@
     <div class="calls" id="calls"></div>
     <div class="verdict" id="verdict" hidden>
       <h2 id="vh"></h2><p id="why"></p><p class="law" id="law"></p><p class="twist" id="twist"></p>
+      <p style="margin:0 0 10px"><a id="clip" target="_blank" rel="noopener" hidden></a></p>
       <button class="primary" id="next">Next call</button>
     </div>
   </main>
@@ -198,7 +200,7 @@
   };
 
   var PLAYS = [
-    { id: "nfl-fumble-touchback", sport: "nfl", league: "NFL", title: "The pylon dive", dur: 5.0, view: [20, -4, 60, 44],
+    { id: "nfl-fumble-touchback", clip: { url: "https://www.nfl.com/videos/justin-jefferson-s-pylon-reach-results-in-fumble-touchback-for-eagles", label: "Watch a real one: Justin Jefferson's pylon reach (NFL.com)" }, sport: "nfl", league: "NFL", title: "The pylon dive", dur: 5.0, view: [20, -4, 60, 44],
       setup: "3rd and goal from the 9. Blue hands off and #22 breaks for the corner.",
       caps: [[0, 1.6, "He's racing for the pylon..."], [1.6, 3.0, "Hit at the 1! The ball pops loose."], [3.0, 5.1, "It rolls through the end zone and out of bounds."]],
       after: "Nobody recovered it. Whose ball is it?",
@@ -214,7 +216,7 @@
       options: ["Touchdown", "Offense keeps it at the 1", "Touchback: defense's ball"], answer: 2, stamp: "TOUCHBACK",
       why: "Touchback. A fumble that goes forward into the opponent's end zone and then out of bounds gives the ball to the defense at its own 20-yard line.",
       law: "NFL Rulebook · Rule 8, Section 7, Article 3", twist: "If the ball had gone out of bounds before the goal line, Blue would keep it at the spot of the fumble." },
-    { id: "nba-airball", sport: "nba", league: "NBA", title: "The airball rebound", dur: 5.2, view: [-1, -6, 51, 56],
+    { id: "nba-airball", clip: { url: "https://videorulebook.nba.com/archive/traveling-player-is-first-to-touch-own-shot-attempt", label: "Watch a real one: NBA Video Rulebook" }, sport: "nba", league: "NBA", title: "The airball rebound", dur: 5.2, view: [-1, -6, 51, 56],
       setup: "Tie game, 20 seconds left. Blue's #3 has it on the wing.",
       caps: [[0, 1.2, "He rises for the three..."], [1.2, 2.6, "Airball. It misses the rim and the backboard."], [2.6, 5.3, "He chases it down, catches it himself and lays it in."]],
       after: "Nobody else touched it. Does the basket count?",
@@ -231,7 +233,7 @@
       options: ["Basket counts", "Traveling", "Shot-clock violation"], answer: 1, stamp: "TRAVELING",
       why: "Traveling. In the NBA, a shooter can't be the first to touch his own shot unless it hit the backboard, the rim or another player. No basket, and Red gets the ball.",
       law: "NBA Rulebook · Rule 10, Section XIII", twist: "If the shot had grazed the rim or the backboard, catching it would be a legal rebound." },
-    { id: "nhl-off-the-ref", sport: "nhl", league: "NHL", title: "Off the stripes", dur: 4.6, view: [-4, -6, 89, 106],
+    { id: "nhl-off-the-ref", clip: { url: "https://www.nhl.com/blues/video/blues-goal-off-ref-disallowed-302834342", label: "Watch a real one: Blues goal off the ref (NHL.com)" }, sport: "nhl", league: "NHL", title: "Off the stripes", dur: 4.6, view: [-4, -6, 89, 106],
       setup: "Tie game, late in the third. Blue cycles the puck back to the point.",
       caps: [[0, 1.4, "Pass to #8 at the point..."], [1.4, 2.3, "The shot is going wide, but it hits the referee..."], [2.3, 4.7, "...and deflects straight into the net!"]],
       after: "The goalie never had a chance. Good goal?",
@@ -248,7 +250,7 @@
       options: ["Good goal", "No goal"], answer: 1, stamp: "NO GOAL",
       why: "No goal. A puck that deflects directly into the net off an official does not count.",
       law: "NHL Rulebook · Rule 78.5", twist: "Anywhere else on the ice, a puck that hits the referee stays live and play carries on." },
-    { id: "mlb-off-the-bag", sport: "mlb", league: "MLB", title: "Off the bag", dur: 4.4, view: [72, 62, 216, 236],
+    { id: "mlb-off-the-bag", clip: { url: "https://www.mlb.com/video/villar-s-odd-base-hit", label: "Watch a real one: Villar's single off the bag (MLB.com)" }, sport: "mlb", league: "MLB", title: "Off the bag", dur: 4.4, view: [72, 62, 216, 236],
       setup: "Bottom of the ninth, two outs. A slow chopper down the first-base line.",
       caps: [[0, 1.2, "It's hugging the line..."], [1.2, 2.7, "Still fair... and it hits the bag."], [2.7, 4.5, "It kicks off the base into foul territory."]],
       after: "It ended up foul. What's the call?",
@@ -263,7 +265,7 @@
       options: ["Fair ball", "Foul ball"], answer: 0, stamp: "FAIR BALL",
       why: "Fair ball. A batted ball that touches first, second or third base is fair, no matter where it ends up.",
       law: "Official Baseball Rules · Definitions of Terms: Fair Ball", twist: "If it had rolled foul before it reached the bag, it would be a foul ball." },
-    { id: "pga-ten-seconds", sport: "pga", league: "PGA", title: "The ten-second rule", dur: 9.0, view: [0.36, 0.28, 1.64, 1.80], replay: 1,
+    { id: "pga-ten-seconds", clip: { url: "https://www.pgatour.com/article/news/ground-rules/2021/10/17/brutal-lip-out-results-in-penalty--not-dq-for-seonghyeon-kim", label: "Watch a real one: Seonghyeon Kim's lip-out (PGATOUR.com)" }, sport: "pga", league: "PGA", title: "The ten-second rule", dur: 9.0, view: [0.36, 0.28, 1.64, 1.80], replay: 1,
       setup: "Birdie putt from 20 feet. It's tracking all the way.",
       caps: [[0, 2.3, "Rolling... rolling..."], [2.3, 3.2, "It stops on the lip. He walks up to the hole."], [3.2, 7.3, "He waits. And waits."], [7.4, 9.1, "After 14 seconds, it drops!"]],
       after: "It went in. What goes on the scorecard?",
@@ -273,7 +275,7 @@
       options: ["Birdie, no penalty", "It's in, plus one penalty stroke", "Doesn't count: putt again"], answer: 1, stamp: "+1 STROKE",
       why: "It counts as holed, but he adds one penalty stroke, so the birdie becomes a par. Once you reach the hole you get 10 more seconds. After that the ball is treated as at rest.",
       law: "Rules of Golf · Rule 13.3a", twist: "If it drops inside those 10 seconds, it's a birdie with no penalty." },
-    { id: "lax-shot-out", sport: "lax", league: "LAX", title: "The race to the end line", dur: 4.4, view: [3, -5, 57, 55], good: 1,
+    { id: "lax-shot-out", clip: { url: "https://premierlacrosseleague.com/articles/an-oral-history-of-connor-mahers-dive-out", label: "Read about a real one: Connor Maher's dive-out (PLL)" }, sport: "lax", league: "LAX", title: "The race to the end line", dur: 4.4, view: [3, -5, 57, 55], good: 1,
       setup: "Blue is on offense, down a goal. #7 winds up from the wing.",
       caps: [[0, 1.0, "He steps in and lets it fly..."], [1.0, 2.2, "Wide! The shot misses the cage."], [2.2, 4.5, "It rolls over the end line and out of bounds."]],
       after: "Blue shot it out. Whose ball is it?",
@@ -368,7 +370,7 @@
   function answer(j){if(answered)return;answered=true;secs+=Math.min(60,(Date.now()-(asked||Date.now()))/1000);asked=0;var p=P[i],ok=j===p.answer;res[i]=ok;
     [].forEach.call($("calls").children,function(b,n){b.disabled=true;if(n===p.answer)b.classList.add("right");else if(n===j)b.classList.add("wrong")});
     $("vh").textContent=ok?"Good call":"Wrong call";$("vh").style.color=ok?"var(--green)":"var(--red)";
-    $("why").textContent=p.why;$("law").textContent=p.law;$("twist").textContent=p.twist;$("next").textContent=i===P.length-1?"See my score":"Next call";
+    $("why").textContent=p.why;$("law").textContent=p.law;$("twist").textContent=p.twist;var a=$("clip");if(p.clip){a.href=p.clip.url;a.textContent=p.clip.label+" ↗";a.hidden=false}else a.hidden=true;$("next").textContent=i===P.length-1?"See my score":"Next call";
     $("verdict").hidden=false;dots();$("next").focus({preventScroll:true})}
   function load(){answered=false;$("verdict").hidden=true;$("sub").textContent="Day "+DAY+"  ·  "+P[i].title;dots();run(false)}
   function grid(){return res.map(function(r){return r?"🟩":"🟥"}).join("")}
