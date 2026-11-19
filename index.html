@@ -130,6 +130,7 @@
       c.lineWidth = 0.5; c.beginPath(); c.moveTo(0, 10); c.lineTo(53.33, 10); c.stroke();
       c.fillStyle = "rgba(255,255,255,.85)"; c.font = "700 3.4px 'Barlow Condensed', Arial, sans-serif";
       [10, 20, 30].forEach(function (n) { [8, 45.3].forEach(function (x) { c.fillText(String(n), x, 10 + n); }); });
+      c.strokeStyle = "#f4c430"; c.lineWidth = 0.45; c.beginPath(); c.moveTo(23.58, -0.6); c.lineTo(29.75, -0.6); c.moveTo(26.66, -0.6); c.lineTo(26.66, -2.6); c.stroke(); c.fillStyle = "#f4c430"; c.beginPath(); c.arc(23.58, -0.6, 0.5, 0, TAU); c.arc(29.75, -0.6, 0.5, 0, TAU); c.fill();
       c.fillStyle = "#ff7a1a"; [[0, 10], [53.33, 10], [0, 0], [53.33, 0]].forEach(function (p) { c.fillRect(p[0] - 0.45, p[1] - 0.45, 0.9, 0.9); });
     },
     nba: function (c) { // feet. baseline y = 0, basket at (25, 5.25)
@@ -199,7 +200,7 @@
     pga: function (c, s) { c.beginPath(); c.arc(0, 0, 9 * s, 0, TAU); c.fillStyle = "#fff"; c.fill(); c.lineWidth = 2.5; c.strokeStyle = COL.ink; c.stroke(); }
   };
 
-  var PLAYS = [
+  var PLAYS_DAY1 = [
     { id: "nfl-fumble-touchback", clip: { url: "https://www.nfl.com/videos/justin-jefferson-s-pylon-reach-results-in-fumble-touchback-for-eagles", label: "Watch a real one: Justin Jefferson's pylon reach (NFL.com)" }, sport: "nfl", league: "NFL", title: "The pylon dive", dur: 5.0, view: [20, -4, 60, 44],
       setup: "3rd and goal from the 9. Blue hands off and #22 breaks for the corner.",
       caps: [[0, 1.6, "He's racing for the pylon..."], [1.6, 3.0, "Hit at the 1! The ball pops loose."], [3.0, 5.1, "It rolls through the end zone and out of bounds."]],
@@ -265,7 +266,7 @@
       options: ["Fair ball", "Foul ball"], answer: 0, stamp: "FAIR BALL",
       why: "Fair ball. A batted ball that touches first, second or third base is fair, no matter where it ends up.",
       law: "Official Baseball Rules · Definitions of Terms: Fair Ball", twist: "If it had rolled foul before it reached the bag, it would be a foul ball." },
-    { id: "pga-ten-seconds", clip: { url: "https://www.pgatour.com/article/news/ground-rules/2021/10/17/brutal-lip-out-results-in-penalty--not-dq-for-seonghyeon-kim", label: "Watch a real one: Seonghyeon Kim's lip-out (PGATOUR.com)" }, sport: "pga", league: "PGA", title: "The ten-second rule", dur: 9.0, view: [0.36, 0.28, 1.64, 1.80], replay: 1,
+    { id: "pga-ten-seconds", sunkAt: 7.6, clip: { url: "https://www.pgatour.com/article/news/ground-rules/2021/10/17/brutal-lip-out-results-in-penalty--not-dq-for-seonghyeon-kim", label: "Watch a real one: Seonghyeon Kim's lip-out (PGATOUR.com)" }, sport: "pga", league: "PGA", title: "The ten-second rule", dur: 9.0, view: [0.36, 0.28, 1.64, 1.80], replay: 1,
       setup: "Birdie putt from 20 feet. It's tracking all the way.",
       caps: [[0, 2.3, "Rolling... rolling..."], [2.3, 3.2, "It stops on the lip. He walks up to the hole."], [3.2, 7.3, "He waits. And waits."], [7.4, 9.1, "After 14 seconds, it drops!"]],
       after: "It went in. What goes on the scorecard?",
@@ -296,6 +297,104 @@
       law: "NCAA Men's Lacrosse Rules · Rule 4, Section 6", twist: "This only applies to shots. A pass thrown out of bounds goes to the other team." }
   ];
 
+  var PLAYS = [
+    { id: "nfl-fair-catch-kick", sport: "nfl", league: "NFL", title: "The forgotten free kick", dur: 4.6, view: [0, -4, 53.33, 66], good: 1,
+      setup: "4 seconds left in the half. Red has to punt from its own 12.",
+      caps: [[0, 0.5, "Red punts from deep in its own end..."], [0.5, 2.2, "It's short. Blue's #84 waves for a fair catch."], [2.2, 4.7, "Caught at the 47 as the clock hits 0:00."]],
+      after: "The clock says the half is over. What can Blue do?",
+      actors: [
+        { team: "a", n: "84", k: [[0, 27.5, 61], [2.2, 26.6, 57.6], [4.6, 26.6, 57.6]] }, { team: "b", n: "4", k: [[0, 26, 24.6], [4.6, 26, 26]] },
+        { team: "b", n: "51", k: [[0, 15, 27], [2.4, 20, 49], [4.6, 20.5, 50]] }, { team: "b", n: "38", k: [[0, 38, 27], [2.4, 33, 50], [4.6, 33, 51]] },
+        { team: "b", n: "22", k: [[0, 27, 29], [2.3, 27.5, 50.5], [4.6, 27.5, 51.5]] },
+        { team: "a", n: "30", k: [[0, 18, 51], [4.6, 19.5, 54]] }, { team: "a", n: "41", k: [[0, 35, 51], [4.6, 34, 54]] }
+      ],
+      ball: [[0, 26, 24], [0.5, 26, 23.6, 1], [2.2, 26.8, 56.8, 2, "arc", 14], [4.6, 26.8, 56.8, 2]],
+      marks: [{ t0: 2.2, t1: 9, type: "label", x: 42, y: 45, text: "FAIR CATCH" }, { t0: 2.2, t1: 9, type: "label", x: 9, y: 45, text: "0:00" }],
+      options: ["Nothing: the half is over", "One untimed play from scrimmage", "A free field goal try, no rush"], answer: 2, stamp: "FAIR CATCH KICK",
+      why: "Blue can try a fair catch kick: a field goal from the spot of the catch, with the defense 10 yards back and no rush. It's worth 3 points, and the half is extended so they can take it.",
+      law: "NFL Rulebook · Rules 10-2 and 11-4-3", twist: "From the 47, that's a 57-yard kick." },
+    { id: "nba-inbound-basket", sport: "nba", league: "NBA", title: "Straight in off the inbounds", dur: 4.4, view: [4.5, -6, 56.5, 56],
+      clip: { url: "https://videorulebook.nba.com/archive/inbound-violation-inbounder-throws-ball-directly-into-the-basket", label: "Watch a real one: NBA Video Rulebook" },
+      setup: "Blue trails by 2 with 1.1 seconds left. #3 inbounds from the sideline.",
+      caps: [[0, 1.0, "He's looking for a cutter..."], [1.0, 2.2, "He lobs it toward the rim..."], [2.2, 4.5, "Nobody touches it. It drops straight through the net!"]],
+      after: "Straight in off the inbounds pass. What's the call?",
+      actors: [
+        { team: "a", n: "3", k: [[0, 52, 20], [4.4, 52, 20]] }, { team: "b", n: "5", k: [[0, 48.3, 20.4], [4.4, 48.3, 19.6]] },
+        { team: "a", n: "21", k: [[0, 31, 13], [2.2, 28.3, 8.6], [4.4, 28.3, 8.6]] }, { team: "b", n: "12", k: [[0, 28.5, 11.5], [2.2, 26.6, 9.6], [4.4, 26.6, 9.6]] },
+        { team: "a", n: "10", k: [[0, 14, 22], [4.4, 15, 20]] }, { team: "b", n: "7", k: [[0, 17, 19], [4.4, 18, 17.5]] },
+        { team: "a", n: "1", k: [[0, 25, 33], [4.4, 26, 29]] }, { team: "b", n: "2", k: [[0, 25, 28.5], [4.4, 25.5, 25.5]] },
+        { team: "a", n: "14", k: [[0, 43, 7], [4.4, 41.5, 9]] }, { team: "b", n: "9", k: [[0, 40, 9.5], [4.4, 38.6, 10.6]] }
+      ],
+      ball: [[0, 51.3, 20, 1], [1.0, 51.3, 20, 1], [2.2, 25, 5.25, 3, "arc", 10], [2.6, 25, 5.7, 0.5], [4.4, 25, 6.6]],
+      marks: [{ t0: 2.2, t1: 3.2, type: "ringAt", x: 25, y: 5.25 }, { t0: 2.2, t1: 9, type: "label", x: 38, y: 0.5, text: "UNTOUCHED" }],
+      options: ["Counts for 3: Blue wins", "Counts for 2: tie game", "No basket: violation"], answer: 2, stamp: "NO BASKET",
+      why: "No basket. A throw-in can't go into the hoop before it touches a player on the court. It's a violation, and Red gets the ball.",
+      law: "NBA Rulebook · Rule 10, Section III", twist: "If a teammate had tipped it on the way in, it would count." },
+    { id: "nhl-thrown-stick", sport: "nhl", league: "NHL", title: "The thrown stick", dur: 4.2, view: [-4, -6, 89, 100], good: 1,
+      clip: { url: "https://www.nhl.com/video/topic/video-rulebook-physical-fouls/video-rulebook-throwing-equipment-6362365074112", label: "Watch the NHL Video Rulebook on this rule" },
+      setup: "Red trails by one and has pulled its goalie for an extra skater. Blue steals the puck.",
+      caps: [[0, 1.8, "Blue's #9 is in alone on the empty net."], [1.8, 2.3, "Red's #5 can't catch him, so he throws his stick..."], [2.3, 4.3, "...and it knocks the shot wide!"]],
+      after: "The net was empty. What's the call?",
+      actors: [
+        { team: "a", n: "9", k: [[0, 44, 72], [1.8, 43, 34, 0, "lin"], [4.2, 42.5, 27]] },
+        { team: "b", n: "5", k: [[0, 53, 82], [1.8, 50, 45, 0, "lin"], [4.2, 49, 38]] },
+        { shape: "stick", from: 1.8, k: [[1.8, 49.5, 43], [2.3, 42.9, 19.4, 0, "lin"], [3.3, 37, 11.5]] },
+        { team: "b", n: "22", k: [[0, 20, 88], [4.2, 25, 62]] }, { team: "a", n: "19", k: [[0, 31, 86], [4.2, 34, 56]] },
+        { team: "ref", n: "R", k: [[0, 71, 52], [4.2, 69, 34]] }
+      ],
+      ball: [[0, 44.7, 71], [1.8, 43.7, 33, 0, "lin"], [2.3, 42.7, 19, 0, "lin"], [3.0, 22, 6.5, 0, "lin"], [4.2, 19.5, 6]],
+      marks: [{ t0: 1.9, t1: 3.4, type: "label", x: 66, y: 22, text: "STICK THROWN!" }, { t0: 2.3, t1: 3.2, type: "ringAt", x: 42.7, y: 19 }],
+      options: ["Penalty shot", "Awarded goal", "Two-minute minor"], answer: 1, stamp: "GOAL AWARDED",
+      why: "Awarded goal. With the goalie pulled, a defender who throws his stick to stop a shot at the open net gives up the goal automatically. Blue doesn't even have to shoot again.",
+      law: "NHL Rulebook · Rule 53.7", twist: "If the goalie had still been on the ice, it would be a penalty shot instead." },
+    { id: "mlb-thrown-glove", sport: "mlb", league: "MLB", title: "The thrown glove", dur: 4.4, view: [38, 44, 162, 214],
+      setup: "Nobody on, one out. The batter rips one back up the middle.",
+      caps: [[0, 1.6, "A hard grounder up the middle..."], [1.6, 1.9, "The shortstop can't reach it, so he flings his glove..."], [1.9, 4.5, "...and it knocks the ball down!"]],
+      after: "The thrown glove hit the ball. What's the call?",
+      actors: [
+        { team: "a", n: "9", k: [[0, 96.5, 189], [0.5, 97, 189], [3.6, 158, 133.5, 0, "lin"], [4.4, 164, 127.5, 0, "lin"]] },
+        { team: "b", n: "6", k: [[0, 78, 86], [1.6, 91, 83.5], [4.4, 96, 82]] },
+        { shape: "glove", from: 1.6, k: [[1.6, 92.5, 83.5], [1.9, 103.6, 84.4, 0, "lin"], [2.5, 107, 88.5]] },
+        { team: "b", n: "4", k: [[0, 124, 88], [4.4, 114, 82]] }, { team: "b", n: "1", k: [[0, 100, 129.5], [0.9, 93.5, 131], [4.4, 93.5, 131]] },
+        { team: "b", n: "3", k: [[0, 150, 108], [4.4, 158.5, 122]] }, { team: "b", n: "2", k: [[0, 100, 197], [4.4, 102, 195]] }
+      ],
+      ball: [[0, 100, 189], [0.4, 100, 187.4, 1], [1.9, 104, 84, 0.3, "lin"], [2.7, 112.5, 77.5], [4.4, 113.5, 77]],
+      marks: [{ t0: 1.9, t1: 2.9, type: "ringAt", x: 104, y: 84 }, { t0: 1.7, t1: 9, type: "label", x: 128, y: 64, text: "GLOVE THROWN!" }],
+      options: ["Nothing: live ball, play on", "Batter gets two bases", "Batter gets three bases"], answer: 2, stamp: "THREE BASES",
+      why: "Three bases. A fielder who deliberately throws his glove at a fair ball and hits it hands the batter third base. The ball stays live, so he can try for home at his own risk.",
+      law: "Official Baseball Rules · Rule 5.06(b)(4)(C)", twist: "If the glove misses the ball, there's no penalty at all." },
+    { id: "pga-ball-hits-ball", sport: "pga", league: "PGA", title: "The unmarked ball", dur: 3.8, view: [0.25, 0.2, 1.95, 2.3],
+      setup: "Stroke play. Both balls are on the green. Blue putts from 25 feet.",
+      caps: [[0, 2.0, "A long putt, tracking toward the hole..."], [2.0, 3.9, "It clips the other player's ball, which was never marked."]],
+      after: "Both balls were on the green. Any penalty?",
+      actors: [
+        { team: "a", n: "P", k: [[0, 1.72, 2.2], [3.8, 1.72, 2.2]] }, { team: "b", n: "B", k: [[0, 0.5, 1.35], [3.8, 0.5, 1.35]] },
+        { shape: "ball", k: [[0, 1.06, 1.15], [2.0, 1.06, 1.15], [2.8, 0.95, 0.94]] }
+      ],
+      ball: [[0, 1.27, 2.12], [2.0, 1.085, 1.19, 0, "lin"], [3.0, 1.21, 1.0]],
+      marks: [{ t0: 2.0, t1: 2.9, type: "ringAt", x: 1.07, y: 1.17 }, { t0: 2.0, t1: 9, type: "label", x: 1.52, y: 1.3, text: "CONTACT" }],
+      options: ["No penalty", "One penalty stroke", "Two penalty strokes"], answer: 2, stamp: "+2 STROKES",
+      why: "Two penalty strokes for the player who putted. In stroke play, if your putt from the green hits another ball at rest on the green, you're penalized. You play yours where it stops, and the other ball goes back.",
+      law: "Rules of Golf · Rule 11.1a, Exception", twist: "In match play there's no penalty at all." },
+    { id: "lax-kicked-goal", sport: "lax", league: "LAX", title: "The kick", dur: 4.2, view: [3, -5, 57, 55], good: 1,
+      setup: "Tie game, final minute. Blue works it around for a shot.",
+      caps: [[0, 1.3, "#7 rips one from the wing..."], [1.3, 2.3, "Saved! But the rebound is loose in front."], [2.3, 4.3, "#9 can't scoop it, so he kicks it into the net!"]],
+      after: "He kicked it in. Does it count?",
+      actors: [
+        { team: "a", n: "7", k: [[0, 43, 33], [0.8, 41, 31], [4.2, 39.5, 28.5]] }, { team: "b", n: "22", k: [[0, 41, 29.5], [0.8, 39.6, 28.4], [4.2, 38, 26]] },
+        { team: "gk", n: "G", k: [[0, 30.4, 16.6], [1.3, 30.8, 16.9], [2.0, 32.2, 17.6], [4.2, 32, 17.4]] },
+        { team: "a", n: "9", k: [[0, 38, 23], [1.6, 36.6, 22], [2.3, 35.1, 20.5], [4.2, 34.6, 19.8]] }, { team: "b", n: "8", k: [[0, 36, 25.5], [2.3, 36.6, 22.6], [4.2, 36, 21.5]] },
+        { team: "a", n: "11", k: [[0, 16, 26], [4.2, 17, 24]] }, { team: "b", n: "3", k: [[0, 18.5, 23.5], [4.2, 19.5, 22]] },
+        { team: "a", n: "4", k: [[0, 21, 9], [4.2, 22, 9]] }, { team: "b", n: "15", k: [[0, 23.5, 12], [4.2, 24.5, 12.5]] },
+        { team: "a", n: "20", k: [[0, 26, 36], [4.2, 26, 34]] }, { team: "b", n: "31", k: [[0, 27, 31], [4.2, 27, 29]] }
+      ],
+      ball: [[0, 42.4, 32.6], [0.8, 40.4, 30.4, 1], [1.3, 31.0, 17.0, 1, "lin"], [1.9, 34.0, 19.6, 0, "lin"], [2.3, 34.2, 19.7], [2.7, 30.2, 14.3, 0, "lin"], [4.2, 30.1, 14.1]],
+      marks: [{ t0: 1.3, t1: 2.2, type: "label", x: 21, y: 18.5, text: "SAVE!" }, { t0: 2.35, t1: 9, type: "label", x: 43, y: 10, text: "KICKED IN!" }],
+      options: ["Goal counts", "No goal: you can't kick it in", "No goal: faceoff"], answer: 0, stamp: "GOAL COUNTS",
+      why: "Goal. In men's lacrosse you're allowed to kick a loose ball, and a ball kicked over the goal line counts the same as a shot.",
+      law: "Men's lacrosse rules · Rule 4, Scoring", twist: "It only counts because he was outside the crease when he kicked it." }
+  ];
+
   function fit(view, rect) { // cover the rect with the view, centred
     var vw = view[2] - view[0], vh = view[3] - view[1], s = Math.max(rect[2] / vw, rect[3] / vh);
     return { s: s, ox: rect[0] + rect[2] / 2 - (view[0] + vw / 2) * s, oy: rect[1] + rect[3] / 2 - (view[1] + vh / 2) * s };
@@ -307,10 +406,15 @@
     var b = at(play.ball, t), bs = rect[2] / 720, lift = b[2] * f.s * (play.sport === "pga" ? 0 : 0.28);
     if (opt.trail) { c.setLineDash([10 * bs, 9 * bs]); c.strokeStyle = "rgba(244,196,48,.9)"; c.lineWidth = 4 * bs; c.beginPath();
       for (var j = 0; j <= 60; j++) { var q = at(play.ball, t * j / 60); j ? c.lineTo(X(q[0]), Y(q[1])) : c.moveTo(X(q[0]), Y(q[1])); } c.stroke(); c.setLineDash([]); }
-    var ents = play.actors.map(function (a) { var p = at(a.k, t); return { a: a, x: p[0], y: p[1] }; }).sort(function (m, n) { return m.y - n.y; });
-    var sunk = play.sport === "pga" && t >= 7.6;
+    var ents = play.actors.filter(function (a) { return a.from === undefined || t >= a.from; }).map(function (a) { var p = at(a.k, t); return { a: a, x: p[0], y: p[1] }; }).sort(function (m, n) { return m.y - n.y; });
+    var sunk = play.sunkAt !== undefined && t >= play.sunkAt;
     ents.forEach(function (e) {
       var x = X(e.x), y = Y(e.y), col = e.a.team === "ref" ? "#fff" : COL[e.a.team];
+      if (e.a.shape) { c.save(); c.translate(x, y);
+        if (e.a.shape === "stick") { var kk = e.a.k, mv = t < kk[kk.length - 1][0]; c.rotate(mv ? t * 14 : 0.7); c.lineCap = "round"; c.strokeStyle = COL.ink; c.lineWidth = PR * 0.42; c.beginPath(); c.moveTo(-PR * 1.5, 0); c.lineTo(PR * 1.5, 0); c.lineTo(PR * 1.9, PR * 0.45); c.stroke(); c.strokeStyle = "#c9a26b"; c.lineWidth = PR * 0.22; c.stroke(); }
+        if (e.a.shape === "glove") { c.rotate(t * 9); c.fillStyle = "#8a5a2b"; c.beginPath(); c.ellipse(0, 0, PR * 0.75, PR * 0.6, 0, 0, TAU); c.fill(); c.lineWidth = PR * 0.16; c.strokeStyle = COL.ink; c.stroke(); c.beginPath(); c.moveTo(-PR * 0.3, -PR * 0.5); c.lineTo(-PR * 0.3, PR * 0.1); c.moveTo(PR * 0.1, -PR * 0.58); c.lineTo(PR * 0.1, PR * 0.1); c.stroke(); }
+        if (e.a.shape === "ball") { c.beginPath(); c.arc(0, 0, 0.0213 * f.s, 0, TAU); c.fillStyle = "#ffe9a8"; c.fill(); c.lineWidth = 2.5 * bs; c.strokeStyle = COL.ink; c.stroke(); }
+        c.restore(); return; }
       c.fillStyle = "rgba(0,0,0,.28)"; c.beginPath(); c.ellipse(x, y + PR * 0.85, PR, PR * 0.4, 0, 0, TAU); c.fill();
       c.beginPath(); c.arc(x, y, PR, 0, TAU); c.fillStyle = col; c.fill();
       if (e.a.team === "ref") { c.save(); c.clip(); c.fillStyle = "#111"; for (var s = -3; s < 4; s += 2) c.fillRect(x + s * PR * 0.28 - PR * 0.14, y - PR, PR * 0.28, PR * 2); c.restore(); c.beginPath(); c.arc(x, y, PR, 0, TAU); }
@@ -341,14 +445,14 @@
   function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
   function capAt(play, t) { for (var i = 0; i < play.caps.length; i++) if (t >= play.caps[i][0] && t < play.caps[i][1]) return play.caps[i][2]; return ""; }
 
-  root.YTR = { PLAYS: PLAYS, draw: draw, chip: chip, rr: rr, capAt: capAt, COL: COL, at: at, cl: cl, sm: sm };
+  root.YTR = { PLAYS: PLAYS, PLAYS_DAY1: PLAYS_DAY1, draw: draw, chip: chip, rr: rr, capAt: capAt, COL: COL, at: at, cl: cl, sm: sm };
 })(window);
 
 </script>
 <script>
 (function(){
   "use strict";
-  var DAY=1, P=YTR.PLAYS, $=function(i){return document.getElementById(i)};
+  var DAY=2, P=YTR.PLAYS, $=function(i){return document.getElementById(i)};
   var cv=$("cv"), c=cv.getContext("2d"), RECT=[0,0,720,820];
   var LB_URL="https://script.google.com/macros/s/AKfycbzGPdRJZk0vHKk9WJ-I07KCqWVHK5xBLxOFX213AK_PV10CoXijYS2iWLANi5TyNs5X/exec", secs=0, asked=0; var i=0, res=[], raf=0, answered=false, reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
