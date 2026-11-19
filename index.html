@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're the Ref</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--night:#0d1712;--panel:#14221a;--line:#2a4234;--chalk:#f3f5ef;--muted:#9fb0a5;--yellow:#f4c430;--red:#e0453f;--green:#2fa866;--display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;--body:Barlow,system-ui,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--night);color:var(--chalk);font-family:var(--body);font-size:16px;line-height:1.45}
+  .wrap{max-width:560px;margin:0 auto;padding:14px 14px 40px}
+  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:8px;margin-bottom:10px}
+  header>div:first-child{white-space:nowrap}
+  .logo{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;text-transform:uppercase;color:var(--yellow)}
+  .sub{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+  .dots{display:flex;gap:6px}
+  .dot{font-family:var(--display);font-weight:800;font-size:14px;letter-spacing:.4px;padding:4px 7px;border-radius:7px;border:1px solid var(--line);color:var(--muted);background:var(--panel)}
+  .dot.now{border-color:var(--yellow);color:var(--chalk)} .dot.ok{background:var(--green);border-color:var(--green);color:#fff} .dot.no{background:var(--red);border-color:var(--red);color:#fff}
+  .stage{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000}
+  canvas{display:block;width:100%;height:auto}
+  .ghost{position:absolute;right:10px;top:10px;background:rgba(0,0,0,.66);border:1px solid var(--line);border-radius:8px;padding:5px 11px;font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.5px;text-transform:uppercase;color:var(--chalk);cursor:pointer}
+  .cap{min-height:52px;margin:12px 2px 10px;font-size:18px;font-weight:600;text-wrap:balance}
+  .cap.q{color:var(--yellow)}
+  .calls{display:grid;gap:8px}
+  button{font:inherit;color:inherit;cursor:pointer;border:0}
+  .call{font-family:var(--display);font-weight:800;font-size:23px;letter-spacing:.5px;text-transform:uppercase;padding:13px 12px;border-radius:12px;background:var(--panel);border:2px solid var(--line);text-align:left}
+  .call:hover:not(:disabled){border-color:var(--yellow)} .call:active:not(:disabled){transform:scale(.985)}
+  .call:disabled{opacity:.45;cursor:default} .call.right{background:var(--green);border-color:var(--green);opacity:1} .call.wrong{background:var(--red);border-color:var(--red);opacity:1}
+  .call:focus-visible,.primary:focus-visible,.ghost:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+  .verdict{margin-top:12px;padding:14px;border-radius:12px;background:var(--panel);border:1px solid var(--line)}
+  .verdict h2{font-family:var(--display);font-weight:800;font-size:28px;line-height:1;margin:0 0 6px;text-transform:uppercase}
+  .verdict p{margin:0 0 8px}
+  .law{color:var(--yellow);font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.5px;text-transform:uppercase}
+  .twist{color:var(--muted);font-size:15px}
+  .primary{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:.6px;text-transform:uppercase;background:var(--yellow);color:#1a1606;border-radius:12px;padding:13px 18px;width:100%;margin-top:6px}
+  .big{font-family:var(--display);font-weight:800;font-size:84px;line-height:.9;font-variant-numeric:tabular-nums}
+  .big small{font-size:36px;color:var(--muted)}
+  .grid{font-size:30px;letter-spacing:4px;margin:10px 0}
+  .muted{color:var(--muted);font-size:14px}
+  .rows{list-style:none;padding:0;margin:12px 0;display:grid;gap:6px}
+  .rows li{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:9px;background:var(--panel);border:1px solid var(--line);font-size:15px}
+  .rows b{font-family:var(--display);font-size:17px;letter-spacing:.4px;text-transform:uppercase}
+  .lb{margin-top:12px;padding:14px;border-radius:12px;background:var(--panel);border:1px solid var(--line)}
+  .lb h3{font-family:var(--display);font-weight:800;font-size:24px;margin:0 0 8px;text-transform:uppercase;color:var(--yellow)}
+  .lbform{display:flex;gap:8px;margin-bottom:10px}
+  .lbform input{flex:1;min-width:0;font:inherit;font-weight:600;color:var(--chalk);background:var(--night);border:2px solid var(--line);border-radius:10px;padding:10px 12px}
+  .lbform input:focus-visible{outline:3px solid var(--yellow);outline-offset:1px}
+  .lbform button{font-family:var(--display);font-weight:800;font-size:20px;text-transform:uppercase;background:var(--yellow);color:#1a1606;border-radius:10px;padding:0 16px}
+  .lbtabs{display:flex;gap:6px;margin-bottom:8px}
+  .lbtabs button{font-family:var(--display);font-weight:700;font-size:16px;text-transform:uppercase;padding:5px 10px;border-radius:8px;background:var(--night);border:1px solid var(--line);color:var(--muted)}
+  .lbtabs button[aria-pressed=true]{border-color:var(--yellow);color:var(--chalk)}
+  .lbl{list-style:none;margin:0;padding:0;font-variant-numeric:tabular-nums}
+  .lbl li{display:grid;grid-template-columns:30px 1fr auto auto;gap:10px;padding:7px 4px;border-top:1px solid var(--line);font-size:15px}
+  .lbl li.me{color:var(--yellow);font-weight:700} .lbl .t{color:var(--muted)}
+  [hidden]{display:none!important}
+  @media (prefers-reduced-motion:reduce){.call{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><div class="logo">You're the Ref</div><div class="sub" id="sub">Today's calls</div></div>
+    <div class="dots" id="dots" aria-label="Progress"></div>
+  </header>
+  <main id="play">
+    <div class="stage"><canvas id="cv" width="720" height="820" role="img" aria-label="Animated diagram of the play"></canvas><button class="ghost" id="again" hidden>Watch again</button></div>
+    <p class="cap" id="cap" aria-live="polite"></p>
+    <div class="calls" id="calls"></div>
+    <div class="verdict" id="verdict" hidden>
+      <h2 id="vh"></h2><p id="why"></p><p class="law" id="law"></p><p class="twist" id="twist"></p>
+      <button class="primary" id="next">Next call</button>
+    </div>
+  </main>
+  <main id="done" hidden>
+    <div class="verdict">
+      <div class="sub" id="rank"></div>
+      <div class="big"><span id="score">0</span><small id="outof">/6</small></div>
+      <div class="grid" id="grid" aria-hidden="true"></div>
+      <p class="muted" id="streak"></p>
+      <ul class="rows" id="rows"></ul>
+      <button class="primary" id="copy">Copy my score</button>
+      <button class="call" id="review" style="width:100%;margin-top:8px;text-align:center">Play these again</button>
+      <p class="muted" style="margin:12px 0 0">Every ruling is checked against the league's official rulebook. Plays are illustrations, not real games. Not affiliated with any league.</p>
+    </div>
+    <section class="lb" id="lb" aria-labelledby="lbh">
+      <h3 id="lbh">Leaderboard</h3>
+      <form class="lbform" id="lbform"><input id="lbname" maxlength="16" autocomplete="nickname" placeholder="Your ref name" aria-label="Your ref name"><button type="submit">Post score</button></form>
+      <div class="lbtabs"><button type="button" id="lbday" aria-pressed="true">Today</button><button type="button" id="lball" aria-pressed="false">All time</button></div>
+      <ol class="lbl" id="lblist"></ol><p class="muted" id="lbmsg" style="margin:8px 0 0"></p>
+    </section>
+  </main>
+</div>
+<script>
+/* You're the Ref: shared engine. Draws five playing surfaces and plays keyframed scenarios.
+   Used by the game (index.html) and by the video renderer (video.html). World units per sport; y grows down the screen. */
+(function (root) {
+  "use strict";
+  var TAU = Math.PI * 2;
+  var COL = { a: "#3f7fe8", b: "#e0453f", gk: "#f4c430", ink: "#0b120e", chalk: "#f3f5ef", yellow: "#f4c430" };
+  function cl(x) { return Math.max(0, Math.min(1, x)); }
+  function sm(k) { k = cl(k); return k * k * (3 - 2 * k); }
+  function at(keys, t) { // keys: [[t, x, y, h?], ...] -> [x, y, h]
+    if (t <= keys[0][0]) return [keys[0][1], keys[0][2], keys[0][3] || 0];
+    for (var i = 1; i < keys.length; i++) {
+      if (t <= keys[i][0]) {
+        var a = keys[i - 1], b = keys[i], k = (t - a[0]) / (b[0] - a[0] || 1), e = b[4] === "lin" ? k : sm(k);
+        var h = (a[3] || 0) + ((b[3] || 0) - (a[3] || 0)) * k;
+        if (b[4] === "arc") { h = (a[3] || 0) * (1 - k) + (b[3] || 0) * k + 4 * b[5] * k * (1 - k); e = k; }
+        return [a[1] + (b[1] - a[1]) * e, a[2] + (b[2] - a[2]) * e, h];
+      }
+    }
+    var z = keys[keys.length - 1]; return [z[1], z[2], z[3] || 0];
+  }
+
+  /* ---------- surfaces (drawn in world units; u = world units per pixel for hairlines) ---------- */
+  var SURF = {
+    nfl: function (c) { // yards. y: 0 end line, 10 goal line, then yards upfield
+      c.fillStyle = "#0f2417"; c.fillRect(-20, -20, 100, 140);
+      c.fillStyle = "#e9ece6"; c.fillRect(-2, -2, 57.33, 110);
+      for (var i = 0; i < 20; i++) { c.fillStyle = i % 2 ? "#23763f" : "#1f6c39"; c.fillRect(0, 10 + i * 5, 53.33, 5); }
+      c.fillStyle = "#1c4f9c"; c.fillRect(0, 0, 53.33, 10);
+      c.fillStyle = "rgba(255,255,255,.35)"; c.font = "800 5.4px 'Barlow Condensed', Arial, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText("END ZONE", 26.66, 5.2);
+      c.strokeStyle = "rgba(255,255,255,.9)"; c.lineWidth = 0.22;
+      for (var y = 15; y <= 100; y += 5) { c.beginPath(); c.moveTo(0, y); c.lineTo(53.33, y); c.stroke(); }
+      for (var yy = 11; yy < 100; yy++) { if ((yy - 10) % 5) { [0.6, 23.4, 29.3, 52.1].forEach(function (x) { c.beginPath(); c.moveTo(x, yy); c.lineTo(x + 0.66, yy); c.stroke(); }); } }
+      c.lineWidth = 0.5; c.beginPath(); c.moveTo(0, 10); c.lineTo(53.33, 10); c.stroke();
+      c.fillStyle = "rgba(255,255,255,.85)"; c.font = "700 3.4px 'Barlow Condensed', Arial, sans-serif";
+      [10, 20, 30].forEach(function (n) { [8, 45.3].forEach(function (x) { c.fillText(String(n), x, 10 + n); }); });
+      c.fillStyle = "#ff7a1a"; [[0, 10], [53.33, 10], [0, 0], [53.33, 0]].forEach(function (p) { c.fillRect(p[0] - 0.45, p[1] - 0.45, 0.9, 0.9); });
+    },
+    nba: function (c) { // feet. baseline y = 0, basket at (25, 5.25)
+      c.fillStyle = "#17120c"; c.fillRect(-30, -30, 110, 130);
+      c.fillStyle = "#c99a62"; c.fillRect(0, 0, 50, 94);
+      c.fillStyle = "rgba(120,70,30,.10)"; for (var i = 0; i < 25; i += 2) c.fillRect(i * 2, 0, 2, 94);
+      c.fillStyle = "#b4502e"; c.fillRect(17, 0, 16, 19);
+      c.strokeStyle = "#fff"; c.lineWidth = 0.33; c.strokeRect(0, 0, 50, 94); c.strokeRect(17, 0, 16, 19);
+      c.beginPath(); c.arc(25, 19, 6, 0, TAU); c.stroke();
+      var a0 = Math.acos(22 / 23.75); c.beginPath(); c.moveTo(3, 0); c.lineTo(3, 5.25 + 23.75 * Math.sin(a0)); c.arc(25, 5.25, 23.75, Math.PI - a0, a0, true); c.lineTo(47, 0); c.stroke();
+      c.beginPath(); c.arc(25, 5.25, 4, 0, Math.PI); c.stroke();
+      c.beginPath(); c.moveTo(0, 47); c.lineTo(50, 47); c.stroke(); c.beginPath(); c.arc(25, 47, 6, 0, TAU); c.stroke();
+      c.lineWidth = 0.5; c.beginPath(); c.moveTo(22, 4); c.lineTo(28, 4); c.stroke();
+      c.strokeStyle = "#ff5a1f"; c.lineWidth = 0.3; c.beginPath(); c.arc(25, 5.25, 0.85, 0, TAU); c.stroke();
+    },
+    nhl: function (c) { // feet. end boards y = 0, goal line y = 11, blue line y = 75, centre line y = 100
+      c.fillStyle = "#101820"; c.fillRect(-30, -30, 150, 180);
+      c.beginPath(); c.moveTo(0, 130); c.lineTo(0, 28); c.arc(28, 28, 28, Math.PI, 1.5 * Math.PI); c.lineTo(57, 0); c.arc(57, 28, 28, 1.5 * Math.PI, 0); c.lineTo(85, 130); c.closePath();
+      c.fillStyle = "#eaf3f8"; c.fill(); c.strokeStyle = "#20303c"; c.lineWidth = 1; c.stroke();
+      c.save(); c.clip();
+      c.fillStyle = "#2a6fd6"; c.fillRect(0, 74.5, 85, 1); c.fillStyle = "#d8343a"; c.fillRect(0, 99.5, 85, 1); c.fillRect(0, 10.9, 85, 0.2);
+      c.strokeStyle = "#d8343a"; c.lineWidth = 0.2;
+      [[20.5, 31], [64.5, 31]].forEach(function (p) { c.beginPath(); c.arc(p[0], p[1], 15, 0, TAU); c.stroke(); c.beginPath(); c.arc(p[0], p[1], 1, 0, TAU); c.fillStyle = "#d8343a"; c.fill(); });
+      [[20.5, 80], [64.5, 80]].forEach(function (p) { c.beginPath(); c.arc(p[0], p[1], 1, 0, TAU); c.fillStyle = "#d8343a"; c.fill(); });
+      c.beginPath(); c.arc(42.5, 11, 6, 0, Math.PI); c.closePath(); c.fillStyle = "#a9d4f2"; c.fill(); c.stroke();
+      c.restore();
+      c.fillStyle = "#fff"; c.fillRect(39.5, 7.6, 6, 3.4); c.strokeStyle = "#d8343a"; c.lineWidth = 0.35; c.strokeRect(39.5, 7.6, 6, 3.4);
+      c.strokeStyle = "rgba(0,0,0,.18)"; c.lineWidth = 0.08; for (var x = 40; x < 45.5; x += 0.5) { c.beginPath(); c.moveTo(x, 7.6); c.lineTo(x, 11); c.stroke(); }
+    },
+    mlb: function (c) { // feet. home (100,190), 1B (163.6,126.4), 2B (100,62.7), 3B (36.4,126.4)
+      c.fillStyle = "#256b34"; c.fillRect(-100, -100, 500, 500);
+      c.fillStyle = "#2d7a3d"; c.beginPath(); c.moveTo(100, 190); c.lineTo(400, -110); c.lineTo(-200, -110); c.closePath(); c.fill();
+      c.fillStyle = "#b9824f"; c.beginPath(); c.arc(100, 127, 97, 0, TAU); c.fill();
+      c.fillStyle = "#2d7a3d"; c.beginPath(); c.moveTo(100, 181); c.lineTo(154, 127); c.lineTo(100, 73); c.lineTo(46, 127); c.closePath(); c.fill();
+      c.fillStyle = "#256b34"; c.beginPath(); c.moveTo(100, 190); c.lineTo(204, 86); c.lineTo(260, 86); c.lineTo(260, 260); c.lineTo(100, 260); c.closePath(); c.fill();
+      c.beginPath(); c.moveTo(100, 190); c.lineTo(-4, 86); c.lineTo(-60, 86); c.lineTo(-60, 260); c.lineTo(100, 260); c.closePath(); c.fill();
+      c.fillStyle = "#b9824f"; c.beginPath(); c.arc(100, 190, 13, 0, TAU); c.fill(); c.beginPath(); c.arc(100, 129.5, 9, 0, TAU); c.fill();
+      c.save(); c.translate(100, 190); c.rotate(-Math.PI / 4); c.fillRect(0, -3, 96, 6); c.restore();
+      c.save(); c.translate(100, 190); c.rotate(-3 * Math.PI / 4); c.fillRect(0, -3, 96, 6); c.restore();
+      c.strokeStyle = "#fff"; c.lineWidth = 0.6; c.beginPath(); c.moveTo(100, 190); c.lineTo(400, -110); c.moveTo(100, 190); c.lineTo(-200, -110); c.stroke();
+      c.fillStyle = "#fff"; [[161.9, 126.4], [100, 62.7], [38.1, 126.4]].forEach(function (p) { c.save(); c.translate(p[0], p[1]); c.rotate(Math.PI / 4); c.fillRect(-1.7, -1.7, 3.4, 3.4); c.restore(); });
+      c.beginPath(); c.moveTo(100, 191.4); c.lineTo(98.6, 190); c.lineTo(98.6, 188.6); c.lineTo(101.4, 188.6); c.lineTo(101.4, 190); c.closePath(); c.fill(); c.fillRect(98.8, 129, 2.4, 0.7);
+    },
+    lax: function (c) { // yards. end line y = 0, goal line y = 15, restraining line y = 35, midfield y = 55
+      c.fillStyle = "#0f2417"; c.fillRect(-20, -20, 100, 150);
+      for (var i = 0; i < 12; i++) { c.fillStyle = i % 2 ? "#2b7f45" : "#277540"; c.fillRect(0, i * 10, 60, 10); }
+      c.strokeStyle = "rgba(255,255,255,.92)"; c.lineWidth = 0.3; c.strokeRect(0, 0, 60, 110);
+      c.beginPath(); c.moveTo(0, 35); c.lineTo(60, 35); c.moveTo(0, 55); c.lineTo(60, 55); c.moveTo(10, 0); c.lineTo(10, 35); c.moveTo(50, 0); c.lineTo(50, 35); c.stroke();
+      c.beginPath(); c.arc(30, 15, 3, 0, TAU); c.fillStyle = "rgba(255,255,255,.14)"; c.fill(); c.stroke();
+      c.strokeStyle = "#ff7a1a"; c.lineWidth = 0.35; c.beginPath(); c.moveTo(29, 15); c.lineTo(30, 13); c.lineTo(31, 15); c.closePath(); c.fillStyle = "rgba(255,255,255,.35)"; c.fill(); c.stroke();
+    },
+    pga: function (c) { // metres, close-up of the hole at (1.0, 0.75)
+      c.fillStyle = "#3f9a52"; c.fillRect(-2, -2, 8, 8);
+      for (var i = -4; i < 14; i++) { c.fillStyle = i % 2 ? "rgba(255,255,255,.05)" : "rgba(0,0,0,.05)"; c.fillRect(i * 0.34, -2, 0.34, 8); }
+      c.fillStyle = "rgba(0,0,0,.25)"; c.beginPath(); c.arc(1.0, 0.757, 0.062, 0, TAU); c.fill();
+      c.fillStyle = "#0c120e"; c.beginPath(); c.arc(1.0, 0.75, 0.054, 0, TAU); c.fill();
+      c.strokeStyle = "#e9ece6"; c.lineWidth = 0.008; c.beginPath(); c.arc(1.0, 0.75, 0.054, 0, TAU); c.stroke();
+    }
+  };
+
+  var BALL = {
+    nfl: function (c, s) { c.save(); c.rotate(-0.6); c.scale(s, s); c.fillStyle = "#7a4521"; c.beginPath(); c.ellipse(0, 0, 13, 8, 0, 0, TAU); c.fill(); c.lineWidth = 2.5; c.strokeStyle = COL.ink; c.stroke(); c.strokeStyle = "#fff"; c.lineWidth = 2; c.beginPath(); c.moveTo(-5, 0); c.lineTo(5, 0); c.stroke(); c.restore(); },
+    nba: function (c, s) { c.beginPath(); c.arc(0, 0, 10 * s, 0, TAU); c.fillStyle = "#e8792b"; c.fill(); c.lineWidth = 2.5; c.strokeStyle = COL.ink; c.stroke(); c.beginPath(); c.moveTo(-10 * s, 0); c.lineTo(10 * s, 0); c.lineWidth = 1.5; c.stroke(); },
+    nhl: function (c, s) { c.beginPath(); c.arc(0, 0, 6.5 * s, 0, TAU); c.fillStyle = "#111"; c.fill(); c.lineWidth = 2; c.strokeStyle = "#fff"; c.stroke(); },
+    mlb: function (c, s) { c.beginPath(); c.arc(0, 0, 7 * s, 0, TAU); c.fillStyle = "#fff"; c.fill(); c.lineWidth = 2.5; c.strokeStyle = COL.ink; c.stroke(); c.strokeStyle = "#d8343a"; c.lineWidth = 1.5; c.beginPath(); c.arc(-9 * s, 0, 7 * s, -0.7, 0.7); c.stroke(); },
+    lax: function (c, s) { c.beginPath(); c.arc(0, 0, 6.5 * s, 0, TAU); c.fillStyle = "#fff"; c.fill(); c.lineWidth = 2.5; c.strokeStyle = COL.ink; c.stroke(); },
+    pga: function (c, s) { c.beginPath(); c.arc(0, 0, 9 * s, 0, TAU); c.fillStyle = "#fff"; c.fill(); c.lineWidth = 2.5; c.strokeStyle = COL.ink; c.stroke(); }
+  };
+
+  var PLAYS = [
+    { id: "nfl-fumble-touchback", sport: "nfl", league: "NFL", title: "The pylon dive", dur: 5.0, view: [20, -4, 60, 44],
+      setup: "3rd and goal from the 9. Blue hands off and #22 breaks for the corner.",
+      caps: [[0, 1.6, "He's racing for the pylon..."], [1.6, 3.0, "Hit at the 1! The ball pops loose."], [3.0, 5.1, "It rolls through the end zone and out of bounds."]],
+      after: "Nobody recovered it. Whose ball is it?",
+      actors: [
+        { team: "a", n: "22", k: [[0, 38, 30], [1.6, 47, 15], [2.3, 50, 11.7], [2.7, 50.8, 11.0], [5, 51, 10.9]] },
+        { team: "b", n: "31", k: [[0, 44.5, 13], [1.6, 48.6, 12.2], [2.3, 50.9, 10.9], [5, 51.6, 10.2]] },
+        { team: "a", n: "77", k: [[0, 34, 27], [2.5, 39, 19], [5, 40, 18]] }, { team: "b", n: "54", k: [[0, 35, 17], [2.5, 41, 16.5], [5, 42, 16]] },
+        { team: "a", n: "11", k: [[0, 30, 6], [5, 33, 5]] }, { team: "b", n: "24", k: [[0, 28, 8], [5, 31, 6.5]] },
+        { team: "a", n: "88", k: [[0, 44, 24], [2.5, 46, 18], [5, 46, 17]] }, { team: "b", n: "59", k: [[0, 41, 12], [2.5, 45, 13.5], [5, 46, 13.5]] }
+      ],
+      ball: [[0, 38.6, 30], [1.6, 47.6, 15], [2.3, 50.5, 11.6], [2.9, 52.0, 9.0, 0, "arc", 1.6], [3.5, 54.8, 7.4, 0, "arc", 0.7], [4.1, 56.2, 6.9], [5, 56.5, 6.8]],
+      marks: [{ t0: 2.3, t1: 3.4, type: "label", x: 43.5, y: 8.5, text: "FUMBLE!" }, { t0: 3.5, t1: 9, type: "ring" }, { t0: 3.6, t1: 9, type: "label", x: 55, y: 3.2, text: "OUT" }],
+      options: ["Touchdown", "Offense keeps it at the 1", "Touchback: defense's ball"], answer: 2, stamp: "TOUCHBACK",
+      why: "Touchback. A fumble that goes forward into the opponent's end zone and then out of bounds gives the ball to the defense at its own 20-yard line.",
+      law: "NFL Rulebook · Rule 8, Section 7, Article 3", twist: "If the ball had gone out of bounds before the goal line, Blue would keep it at the spot of the fumble." },
+    { id: "nba-airball", sport: "nba", league: "NBA", title: "The airball rebound", dur: 5.2, view: [-1, -6, 51, 56],
+      setup: "Tie game, 20 seconds left. Blue's #3 has it on the wing.",
+      caps: [[0, 1.2, "He rises for the three..."], [1.2, 2.6, "Airball. It misses the rim and the backboard."], [2.6, 5.3, "He chases it down, catches it himself and lays it in."]],
+      after: "Nobody else touched it. Does the basket count?",
+      actors: [
+        { team: "a", n: "3", k: [[0, 40, 24], [1.2, 40, 24], [2.7, 29.4, 10.4], [3.3, 26.7, 7.2], [5.2, 28, 10]] },
+        { team: "b", n: "5", k: [[0, 37.6, 21.4], [1.1, 38.4, 22.4], [2.7, 36, 19], [5.2, 33, 14]] },
+        { team: "b", n: "12", k: [[0, 21.5, 9], [5.2, 21, 8.5]] }, { team: "a", n: "21", k: [[0, 18.5, 6.5], [5.2, 18, 6]] },
+        { team: "a", n: "10", k: [[0, 9, 23], [5.2, 9, 22]] }, { team: "b", n: "7", k: [[0, 13, 18], [5.2, 14, 17]] },
+        { team: "a", n: "1", k: [[0, 25, 34], [5.2, 25, 33]] }, { team: "b", n: "2", k: [[0, 25, 29], [5.2, 25, 27]] },
+        { team: "a", n: "14", k: [[0, 44, 6], [5.2, 44, 6]] }, { team: "b", n: "9", k: [[0, 39.5, 8.5], [5.2, 38, 9]] }
+      ],
+      ball: [[0, 39.2, 23.4], [1.2, 39.2, 23.4, 1], [2.3, 28.3, 9.7, 3, "arc", 9], [2.7, 29.0, 10.0, 2.5], [3.3, 26.0, 6.4, 3.4], [3.6, 25, 5.25, 3], [4.0, 25, 5.7, 0.5], [5.2, 25, 6.6]],
+      marks: [{ t0: 1.9, t1: 3.0, type: "label", x: 36, y: 3.2, text: "AIRBALL" }, { t0: 2.3, t1: 2.75, type: "ring" }],
+      options: ["Basket counts", "Traveling", "Shot-clock violation"], answer: 1, stamp: "TRAVELING",
+      why: "Traveling. In the NBA, a shooter can't be the first to touch his own shot unless it hit the backboard, the rim or another player. No basket, and Red gets the ball.",
+      law: "NBA Rulebook · Rule 10, Section XIII", twist: "If the shot had grazed the rim or the backboard, catching it would be a legal rebound." },
+    { id: "nhl-off-the-ref", sport: "nhl", league: "NHL", title: "Off the stripes", dur: 4.6, view: [-4, -6, 89, 106],
+      setup: "Tie game, late in the third. Blue cycles the puck back to the point.",
+      caps: [[0, 1.4, "Pass to #8 at the point..."], [1.4, 2.3, "The shot is going wide, but it hits the referee..."], [2.3, 4.7, "...and deflects straight into the net!"]],
+      after: "The goalie never had a chance. Good goal?",
+      actors: [
+        { team: "a", n: "8", k: [[0, 66, 68], [4.6, 64.5, 66]] }, { team: "a", n: "19", k: [[0, 10, 50], [4.6, 11, 48]] },
+        { team: "ref", n: "R", k: [[0, 62, 25], [1.4, 61, 22.8], [2.0, 60.8, 22.2], [4.6, 61.5, 23.5]] },
+        { team: "gk", n: "G", k: [[0, 42.5, 14.5], [1.4, 43, 14.5], [2.0, 48.5, 17], [4.6, 47.5, 16.5]] },
+        { team: "a", n: "28", k: [[0, 37, 23], [4.6, 37.5, 21]] }, { team: "b", n: "4", k: [[0, 34.5, 20.5], [4.6, 35, 19]] },
+        { team: "b", n: "6", k: [[0, 53, 33], [4.6, 54, 31]] }, { team: "b", n: "22", k: [[0, 30, 46], [4.6, 31, 43]] },
+        { team: "a", n: "14", k: [[0, 21, 27], [4.6, 23, 25]] }, { team: "b", n: "17", k: [[0, 60, 58], [1.4, 63, 63], [4.6, 63, 62]] }
+      ],
+      ball: [[0, 11.5, 50], [0.9, 64.6, 66.6, 0, "lin"], [1.4, 64.6, 66.6], [2.0, 61.0, 23.6, 0, "lin"], [2.45, 44.6, 10.0, 0, "lin"], [4.6, 44.3, 9.4]],
+      marks: [{ t0: 2.0, t1: 3.3, type: "label", x: 70, y: 13, text: "OFF THE REF!" }, { t0: 2.0, t1: 3.0, type: "ringAt", x: 60.8, y: 22.2 }],
+      options: ["Good goal", "No goal"], answer: 1, stamp: "NO GOAL",
+      why: "No goal. A puck that deflects directly into the net off an official does not count.",
+      law: "NHL Rulebook · Rule 78.5", twist: "Anywhere else on the ice, a puck that hits the referee stays live and play carries on." },
+    { id: "mlb-off-the-bag", sport: "mlb", league: "MLB", title: "Off the bag", dur: 4.4, view: [72, 62, 216, 236],
+      setup: "Bottom of the ninth, two outs. A slow chopper down the first-base line.",
+      caps: [[0, 1.2, "It's hugging the line..."], [1.2, 2.7, "Still fair... and it hits the bag."], [2.7, 4.5, "It kicks off the base into foul territory."]],
+      after: "It ended up foul. What's the call?",
+      actors: [
+        { team: "a", n: "9", k: [[0, 96.5, 189], [0.5, 97, 189], [3.7, 158, 133.5, 0, "lin"], [4.4, 168, 124, 0, "lin"]] },
+        { team: "b", n: "3", k: [[0, 149, 106], [2.0, 153, 114], [2.5, 156.5, 119.5], [4.4, 158, 121]] },
+        { team: "b", n: "4", k: [[0, 126, 86], [4.4, 138, 100]] }, { team: "b", n: "1", k: [[0, 100, 129.5], [4.4, 118, 138]] },
+        { team: "b", n: "2", k: [[0, 100, 197], [4.4, 103, 194]] }, { team: "ref", n: "U", k: [[0, 174, 111], [4.4, 174, 111]] }
+      ],
+      ball: [[0, 100, 189], [0.5, 100, 188.4, 1], [1.0, 115.2, 173.6, 0.2, "arc", 2.5], [2.55, 161.6, 127.0, 0.2, "lin"], [3.2, 181, 129, 0, "arc", 3], [3.9, 195, 134.5, 0, "arc", 0.8], [4.4, 199, 136]],
+      marks: [{ t0: 2.55, t1: 3.6, type: "ringAt", x: 161.9, y: 126.4 }, { t0: 2.55, t1: 9, type: "label", x: 186, y: 108, text: "OFF THE BAG" }],
+      options: ["Fair ball", "Foul ball"], answer: 0, stamp: "FAIR BALL",
+      why: "Fair ball. A batted ball that touches first, second or third base is fair, no matter where it ends up.",
+      law: "Official Baseball Rules · Definitions of Terms: Fair Ball", twist: "If it had rolled foul before it reached the bag, it would be a foul ball." },
+    { id: "pga-ten-seconds", sport: "pga", league: "PGA", title: "The ten-second rule", dur: 9.0, view: [0.36, 0.28, 1.64, 1.80], replay: 1,
+      setup: "Birdie putt from 20 feet. It's tracking all the way.",
+      caps: [[0, 2.3, "Rolling... rolling..."], [2.3, 3.2, "It stops on the lip. He walks up to the hole."], [3.2, 7.3, "He waits. And waits."], [7.4, 9.1, "After 14 seconds, it drops!"]],
+      after: "It went in. What goes on the scorecard?",
+      actors: [{ team: "a", n: "P", k: [[0, 1.75, 2.6], [1.8, 1.75, 2.6], [3.0, 1.42, 1.08], [9, 1.42, 1.08]] }],
+      ball: [[0, 1.03, 2.3], [2.3, 1.0, 0.812], [7.4, 1.0, 0.812], [7.75, 1.0, 0.755]],
+      marks: [{ t0: 3.0, t1: 9, type: "timer", x: 0.78, y: 0.47, from: 3.0, rate: 14 / 4.4, stop: 7.4, limit: 10 }],
+      options: ["Birdie, no penalty", "It's in, plus one penalty stroke", "Doesn't count: putt again"], answer: 1, stamp: "+1 STROKE",
+      why: "It counts as holed, but he adds one penalty stroke, so the birdie becomes a par. Once you reach the hole you get 10 more seconds. After that the ball is treated as at rest.",
+      law: "Rules of Golf · Rule 13.3a", twist: "If it drops inside those 10 seconds, it's a birdie with no penalty." },
+    { id: "lax-shot-out", sport: "lax", league: "LAX", title: "The race to the end line", dur: 4.4, view: [3, -5, 57, 55], good: 1,
+      setup: "Blue is on offense, down a goal. #7 winds up from the wing.",
+      caps: [[0, 1.0, "He steps in and lets it fly..."], [1.0, 2.2, "Wide! The shot misses the cage."], [2.2, 4.5, "It rolls over the end line and out of bounds."]],
+      after: "Blue shot it out. Whose ball is it?",
+      actors: [
+        { team: "a", n: "7", k: [[0, 43, 33], [1.0, 40.5, 30.5], [4.4, 39, 28]] }, { team: "b", n: "22", k: [[0, 41, 29], [1.0, 39.5, 28], [4.4, 38, 26]] },
+        { team: "a", n: "4", k: [[0, 21, 9], [1.2, 21.5, 8.5], [2.2, 25.2, 1.9], [4.4, 25.6, 1.2]] },
+        { team: "b", n: "15", k: [[0, 23.5, 12], [1.3, 24, 11.5], [2.2, 27.2, 6.2], [4.4, 26.8, 3.4]] },
+        { team: "gk", n: "G", k: [[0, 30.6, 16.4], [1.5, 31.2, 16.2], [2.2, 30.5, 12.5], [4.4, 29, 8]] },
+        { team: "a", n: "11", k: [[0, 16, 26], [4.4, 17, 24]] }, { team: "b", n: "3", k: [[0, 18.5, 23.5], [4.4, 19.5, 22]] },
+        { team: "a", n: "9", k: [[0, 36, 19], [4.4, 35, 18]] }, { team: "b", n: "8", k: [[0, 34, 21], [4.4, 33.5, 19.5]] },
+        { team: "a", n: "20", k: [[0, 26, 36], [4.4, 26, 34]] }, { team: "b", n: "31", k: [[0, 27, 31], [4.4, 27, 29]] },
+        { team: "a", n: "2", k: [[0, 46, 12], [4.4, 45, 11]] }, { team: "b", n: "6", k: [[0, 43, 14.5], [4.4, 42.5, 13.5]] }
+      ],
+      ball: [[0, 42.4, 32.6], [1.0, 40.2, 30.0, 1], [1.55, 33.2, 15.0, 1.2, "lin"], [2.2, 26.2, 0.0, 0, "lin"], [2.6, 24.6, -3.4, 0, "lin"], [4.4, 24.3, -4.0]],
+      marks: [{ t0: 1.5, t1: 2.5, type: "label", x: 41, y: 9, text: "WIDE!" }, { t0: 2.2, t1: 9, type: "ringAt", x: 26.2, y: 0 }, { t0: 2.3, t1: 9, type: "label", x: 34, y: -2.2, text: "OUT" }],
+      options: ["Red's ball: Blue shot it out", "Blue keeps it", "Faceoff"], answer: 1, stamp: "BLUE KEEPS IT",
+      why: "Blue keeps it. When a shot goes out of bounds, the ball goes to the team whose inbounds player is nearest to it when it crosses the line. Blue's #4 won the race.",
+      law: "NCAA Men's Lacrosse Rules · Rule 4, Section 6", twist: "This only applies to shots. A pass thrown out of bounds goes to the other team." }
+  ];
+
+  function fit(view, rect) { // cover the rect with the view, centred
+    var vw = view[2] - view[0], vh = view[3] - view[1], s = Math.max(rect[2] / vw, rect[3] / vh);
+    return { s: s, ox: rect[0] + rect[2] / 2 - (view[0] + vw / 2) * s, oy: rect[1] + rect[3] / 2 - (view[1] + vh / 2) * s };
+  }
+  function draw(c, play, t, rect, opt) {
+    opt = opt || {}; var f = fit(play.view, rect), PR = rect[2] * 0.029, X = function (x) { return f.ox + x * f.s; }, Y = function (y) { return f.oy + y * f.s; };
+    c.save(); c.beginPath(); c.rect(rect[0], rect[1], rect[2], rect[3]); c.clip();
+    c.save(); c.translate(f.ox, f.oy); c.scale(f.s, f.s); SURF[play.sport](c); c.restore();
+    var b = at(play.ball, t), bs = rect[2] / 720, lift = b[2] * f.s * (play.sport === "pga" ? 0 : 0.28);
+    if (opt.trail) { c.setLineDash([10 * bs, 9 * bs]); c.strokeStyle = "rgba(244,196,48,.9)"; c.lineWidth = 4 * bs; c.beginPath();
+      for (var j = 0; j <= 60; j++) { var q = at(play.ball, t * j / 60); j ? c.lineTo(X(q[0]), Y(q[1])) : c.moveTo(X(q[0]), Y(q[1])); } c.stroke(); c.setLineDash([]); }
+    var ents = play.actors.map(function (a) { var p = at(a.k, t); return { a: a, x: p[0], y: p[1] }; }).sort(function (m, n) { return m.y - n.y; });
+    var sunk = play.sport === "pga" && t >= 7.6;
+    ents.forEach(function (e) {
+      var x = X(e.x), y = Y(e.y), col = e.a.team === "ref" ? "#fff" : COL[e.a.team];
+      c.fillStyle = "rgba(0,0,0,.28)"; c.beginPath(); c.ellipse(x, y + PR * 0.85, PR, PR * 0.4, 0, 0, TAU); c.fill();
+      c.beginPath(); c.arc(x, y, PR, 0, TAU); c.fillStyle = col; c.fill();
+      if (e.a.team === "ref") { c.save(); c.clip(); c.fillStyle = "#111"; for (var s = -3; s < 4; s += 2) c.fillRect(x + s * PR * 0.28 - PR * 0.14, y - PR, PR * 0.28, PR * 2); c.restore(); c.beginPath(); c.arc(x, y, PR, 0, TAU); }
+      c.lineWidth = PR * 0.2; c.strokeStyle = COL.ink; c.stroke();
+      if (e.a.team === "ref") { c.fillStyle = "#fff"; c.beginPath(); c.arc(x, y, PR * 0.52, 0, TAU); c.fill(); }
+      c.fillStyle = e.a.team === "gk" || e.a.team === "ref" ? "#111" : "#fff"; c.font = "700 " + (PR * 0.95) + "px Barlow, Arial, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(e.a.n, x, y + PR * 0.06);
+    });
+    var bx = X(b[0]), by = Y(b[1]) - lift;
+    if (!sunk) { c.fillStyle = "rgba(0,0,0,.3)"; c.beginPath(); c.ellipse(X(b[0]) + lift * 0.3, Y(b[1]) + 6 * bs, 9 * bs, 4 * bs, 0, 0, TAU); c.fill(); }
+    c.save(); c.translate(bx, by);
+    if (play.sport === "pga") { var r = 0.0213 * f.s * (sunk ? 0.8 : 1); c.globalAlpha = sunk ? 0.55 : 1; c.beginPath(); c.arc(0, 0, r, 0, TAU); c.fillStyle = "#fff"; c.fill(); c.lineWidth = 2.5 * bs; c.strokeStyle = COL.ink; c.stroke(); }
+    else BALL[play.sport](c, bs * (1 + b[2] * 0.035));
+    c.restore();
+    (play.marks || []).forEach(function (m) {
+      if (t < m.t0 || t > m.t1) return; var k = cl((t - m.t0) / 0.2);
+      if (m.type === "ring" || m.type === "ringAt") { var rx = m.type === "ring" ? bx : X(m.x), ry = m.type === "ring" ? by : Y(m.y); c.strokeStyle = COL.yellow; c.lineWidth = 5 * bs; c.beginPath(); c.arc(rx, ry, (26 + 4 * Math.sin(t * 9)) * bs, 0, TAU); c.stroke(); }
+      if (m.type === "label") { chip(c, m.text, X(m.x), Y(m.y), 30 * bs, "#111", COL.yellow, k); }
+      if (m.type === "timer") { var sec = Math.min(t, m.stop) - m.from; sec = Math.max(0, sec * m.rate); var over = sec > m.limit;
+        chip(c, "WAITING  0:" + ("0" + Math.floor(sec)).slice(-2), X(m.x), Y(m.y), 34 * bs, "#fff", over ? COL.b : "rgba(0,0,0,.75)", k);
+        chip(c, over ? "PAST THE 10-SECOND LIMIT" : "10-SECOND LIMIT", X(m.x), Y(m.y) + 52 * bs, 22 * bs, over ? COL.yellow : "#cfd8d2", "rgba(0,0,0,.6)", k); }
+    });
+    c.restore();
+  }
+  function chip(c, text, x, y, size, fg, bg, k) {
+    c.save(); c.globalAlpha = k === undefined ? 1 : k; c.font = "800 " + size + "px 'Barlow Condensed', Arial, sans-serif"; var w = c.measureText(text).width + size * 0.9, h = size * 1.45;
+    c.fillStyle = bg; rr(c, x - w / 2, y - h / 2, w, h, h * 0.3); c.fill(); c.fillStyle = fg; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(text, x, y + size * 0.05); c.restore();
+  }
+  function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function capAt(play, t) { for (var i = 0; i < play.caps.length; i++) if (t >= play.caps[i][0] && t < play.caps[i][1]) return play.caps[i][2]; return ""; }
+
+  root.YTR = { PLAYS: PLAYS, draw: draw, chip: chip, rr: rr, capAt: capAt, COL: COL, at: at, cl: cl, sm: sm };
+})(window);
+
+</script>
+<script>
+(function(){
+  "use strict";
+  var DAY=1, P=YTR.PLAYS, $=function(i){return document.getElementById(i)};
+  var cv=$("cv"), c=cv.getContext("2d"), RECT=[0,0,720,820];
+  var LB_URL="", secs=0, asked=0; var i=0, res=[], raf=0, answered=false, reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+  function dots(){$("dots").innerHTML=P.map(function(p,j){var s=res[j]===undefined?(j===i?"now":""):(res[j]?"ok":"no");return '<span class="dot '+s+'">'+p.league+'</span>'}).join("")}
+  function paint(t,trail){YTR.draw(c,P[i],t,RECT,{trail:trail});var lb=P[i].league;c.font="800 24px 'Barlow Condensed', Arial, sans-serif";YTR.chip(c,lb,14+(c.measureText(lb).width+21.6)/2,32,24,"#111","#f4c430",1)}
+  function run(slow){
+    cancelAnimationFrame(raf);var p=P[i],k=slow?(p.replay?0.8:0.5):1,t0=null,lead=slow?0:1400;
+    $("again").hidden=true; if(!slow){$("calls").innerHTML="";$("cap").className="cap";$("cap").textContent=p.setup}
+    if(reduce){paint(p.dur,true);ask();return}
+    function step(now){if(t0===null)t0=now;var t=Math.max(0,(now-t0-lead)/1000)*k;
+      if(t>=p.dur){paint(p.dur,true);ask();return}
+      paint(t,slow);if(now-t0>=lead&&!answered){$("cap").className="cap";$("cap").textContent=YTR.capAt(p,t)||$("cap").textContent}
+      raf=requestAnimationFrame(step)}
+    raf=requestAnimationFrame(step)
+  }
+  function ask(){var p=P[i];$("again").hidden=false;if(answered)return;if(!asked)asked=Date.now();$("cap").className="cap q";$("cap").textContent=p.after;
+    if($("calls").children.length)return;
+    p.options.forEach(function(o,j){var b=document.createElement("button");b.className="call";b.textContent=o;b.onclick=function(){answer(j)};$("calls").appendChild(b)})}
+  function answer(j){if(answered)return;answered=true;secs+=Math.min(60,(Date.now()-(asked||Date.now()))/1000);asked=0;var p=P[i],ok=j===p.answer;res[i]=ok;
+    [].forEach.call($("calls").children,function(b,n){b.disabled=true;if(n===p.answer)b.classList.add("right");else if(n===j)b.classList.add("wrong")});
+    $("vh").textContent=ok?"Good call":"Wrong call";$("vh").style.color=ok?"var(--green)":"var(--red)";
+    $("why").textContent=p.why;$("law").textContent=p.law;$("twist").textContent=p.twist;$("next").textContent=i===P.length-1?"See my score":"Next call";
+    $("verdict").hidden=false;dots();$("next").focus({preventScroll:true})}
+  function load(){answered=false;$("verdict").hidden=true;$("sub").textContent="Day "+DAY+"  ·  "+P[i].title;dots();run(false)}
+  function grid(){return res.map(function(r){return r?"🟩":"🟥"}).join("")}
+  function finish(){
+    var n=res.filter(Boolean).length,ranks=["Fan in the cheap seats","Replay booth intern","Line judge","Line judge","Crew chief","Crew chief","Head of officiating"];
+    $("play").hidden=true;$("done").hidden=false;$("sub").textContent="Day "+DAY+"  ·  Final";$("score").textContent=n;$("outof").textContent="/"+P.length;$("rank").textContent=ranks[n];$("grid").textContent=grid();
+    $("rows").innerHTML=P.map(function(p,j){return "<li><span><b>"+p.league+"</b> · "+p.title+"</span><span>"+p.stamp+" "+(res[j]?"✓":"✗")+"</span></li>"}).join("");
+    var s=store("ytr_daily")||{};if(s.last!==DAY){s.streak=(s.last===DAY-1?(s.streak||0):0)+1;s.last=DAY;s.first=n}s.best=Math.max(s.best||0,n);store("ytr_daily",s);
+    lbInit(n,s);$("streak").textContent=s.streak?"Streak: "+s.streak+" day"+(s.streak>1?"s":"")+"  ·  Best: "+s.best+"/"+P.length:"";dots()}
+  $("again").onclick=function(){run(true)};
+  $("next").onclick=function(){if(i===P.length-1){finish();return}i++;load();window.scrollTo({top:0,behavior:reduce?"auto":"smooth"})};
+  $("review").onclick=function(){i=0;res=[];secs=0;practice=true;$("done").hidden=true;$("play").hidden=false;load()};
+  $("copy").onclick=function(){var t="You're the Ref · Day "+DAY+"\n"+P.map(function(p){return p.league}).join(" ")+"\n"+grid()+"  "+res.filter(Boolean).length+"/"+P.length,b=this;
+    function ok(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy my score"},1600)}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,function(){b.textContent=t});else b.textContent=t};
+  var practice=false, board=null, tab="day";
+  function lbShow(){var rows=board?(tab==="day"?board.day:board.all)||[]:[],me=(store("ytr_name")||"").toLowerCase(),L=$("lblist");L.textContent="";
+    rows.forEach(function(r,k){var li=document.createElement("li");if(r.name.toLowerCase()===me)li.className="me";
+      [String(k+1),r.name,tab==="day"?r.score+"/"+r.total:r.score+" right",tab==="day"?Math.round(r.secs)+"s":r.days+" day"+(r.days>1?"s":"")].forEach(function(x,m){var s=document.createElement("span");if(m===3)s.className="t";s.textContent=x;li.appendChild(s)});L.appendChild(li)});
+    if(!rows.length&&board)$("lbmsg").textContent="No scores yet. Be the first."}
+  function lbCall(body){return fetch(LB_URL+(body?"":"?day="+DAY),body?{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(body)}:{}).then(function(r){return r.json()})}
+  function lbInit(n,s){
+    if(!LB_URL){$("lbform").hidden=true;$("lbmsg").textContent="The leaderboard isn't switched on yet.";return}
+    var posted=s.posted===DAY;$("lbform").hidden=posted||practice;$("lbname").value=store("ytr_name")||"";
+    $("lbmsg").textContent=practice&&!posted?"Replays are practice. Only your first run counts.":"Loading scores...";
+    lbCall().then(function(b){board=b;$("lbmsg").textContent=practice&&!posted?"Replays are practice. Only your first run counts.":"";lbShow()},function(){$("lbmsg").textContent="Couldn't load the leaderboard. Try again later."});
+    $("lbform").onsubmit=function(e){e.preventDefault();var name=$("lbname").value.replace(/[^A-Za-z0-9 _-]/g,"").trim().slice(0,16);
+      if(name.length<2){$("lbmsg").textContent="Pick a name with at least 2 letters or numbers.";return}
+      $("lbmsg").textContent="Posting...";lbCall({day:DAY,name:name,score:n,total:P.length,secs:Math.round(secs*10)/10}).then(function(b){
+        if(b.error){$("lbmsg").textContent=b.error;return}board=b;store("ytr_name",name);var z=store("ytr_daily")||{};z.posted=DAY;store("ytr_daily",z);$("lbform").hidden=true;$("lbmsg").textContent="Posted.";lbShow()},function(){$("lbmsg").textContent="Couldn't post your score. Try again."})}}
+  $("lbday").onclick=function(){tab="day";this.setAttribute("aria-pressed","true");$("lball").setAttribute("aria-pressed","false");lbShow()};
+  $("lball").onclick=function(){tab="all";this.setAttribute("aria-pressed","true");$("lbday").setAttribute("aria-pressed","false");lbShow()};
+  window.__ytr={answer:answer,state:function(){return {i:i,res:res,answered:answered}},skip:function(){cancelAnimationFrame(raf);paint(P[i].dur,true);ask()}};
+  load();
+})();
+</script>
+</body>
+</html>
