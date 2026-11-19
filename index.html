@@ -459,11 +459,11 @@
   function dots(){$("dots").innerHTML=P.map(function(p,j){var s=res[j]===undefined?(j===i?"now":""):(res[j]?"ok":"no");return '<span class="dot '+s+'">'+p.league+'</span>'}).join("")}
   function paint(t,trail){YTR.draw(c,P[i],t,RECT,{trail:trail});var lb=P[i].league;c.font="800 24px 'Barlow Condensed', Arial, sans-serif";YTR.chip(c,lb,14+(c.measureText(lb).width+21.6)/2,32,24,"#111","#f4c430",1)}
   function run(slow){
-    cancelAnimationFrame(raf);var p=P[i],k=slow?(p.replay?0.8:0.5):1,t0=null,lead=slow?0:1400;
+    cancelAnimationFrame(raf);var p=P[i],k=slow?(p.replay?0.8:0.5):0.7,t0=null,lead=slow?0:3600;
     $("again").hidden=true; if(!slow){$("calls").innerHTML="";$("cap").className="cap";$("cap").textContent=p.setup}
     if(reduce){paint(p.dur,true);ask();return}
     function step(now){if(t0===null)t0=now;var t=Math.max(0,(now-t0-lead)/1000)*k;
-      if(t>=p.dur){paint(p.dur,true);ask();return}
+      if(t>=p.dur){paint(p.dur,true);if(slow)ask();else setTimeout(ask,1800);return}
       paint(t,slow);if(now-t0>=lead&&!answered){$("cap").className="cap";$("cap").textContent=YTR.capAt(p,t)||$("cap").textContent}
       raf=requestAnimationFrame(step)}
     raf=requestAnimationFrame(step)
