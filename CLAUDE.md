@@ -9,6 +9,7 @@ A static GitHub Pages site with a home screen and one folder per game. No build 
   Older instructions written before 20 Nov 2026 call these files `slates/day-N.js`, `slates/latest.js` and `index.html`; they mean the ones inside `youre-the-ref/`. There is no `slates/` folder at the root, and none should be created.
 - `call-the-play/`: the second game (see the last section).
 - `draft-room/`: the third game (see its section at the end).
+- `beat-the-bookie/`: the sixth game, also on `quiz.js` (see the last section).
 - `trade-desk/` and `box-score/`: the fourth and fifth games. Both pages are thin configs over the shared `quiz.js` and `quiz.css` at the root (see the last section).
 - `leaderboard/Code.gs`: the Google Apps Script behind the You're the Ref leaderboard (already deployed; do not change).
 - `tools/check.js`: `node tools/check.js` validates every You're the Ref slate. Must pass before pushing.
@@ -104,3 +105,10 @@ Both are card quizzes with no animation. Each page calls `Quiz.start({...})` fro
 **Box Score Detective**: one famous single-game stat line; the player picks whose it was from four options. `box-score/slates/day-N.js` registers on `window.BX_SLATES[N]`, `latest.js` sets `window.BX_LATEST`, and `node tools/check-bx.js` validates.
 - Round: `{ id, sport, year, clue: "one line of context that does not name the player or teams", q: "the question", line: [4 to 6 of ["Label", "value"]], options: [four names], answer: index, fact: "Final score · date", why: "1 or 2 sentences of context", src: { url, label } }`.
 - Rules: look up the exact line and game details by web search against a box score or the league's own account; never write a stat from memory. The three wrong options must be plausible players from the same era and position, and the line must fit only the right one. Mix the sports and the difficulty, and vary the answer position. Never reuse a game.
+
+## Beat the Bookie (in `beat-the-bookie/`)
+
+A famous past game with the teams hidden, the real point spread and a few facts a bettor knew before kickoff; the player picks whether the favorite or the underdog covered. Built on the shared `quiz.js` like Trade Desk. `beat-the-bookie/slates/day-N.js` registers on `window.BB_SLATES[N]`, `latest.js` sets `window.BB_LATEST`, and `node tools/check-bb.js` validates. Day 1 was 20 Nov 2026 US Eastern. Six games a day.
+
+- Round: `{ id, sport, when: "a decade, not the exact year", event: "Championship game", line: points the favorite is laying, answer: 0 if the favorite covered or 1 if the underdog did, sides: [favorite, underdog] each { team, record, facts: [2 to 4 pre-game facts, no names] }, fact: "Final score · game and date", why: "how it went, 1 or 2 sentences", src: { url, label } }`. Side 0 is always the favorite.
+- Rules: only real games whose closing spread is confirmed tonight by web search in at least one solid source (the game's Wikipedia article, the Las Vegas Review-Journal or VegasInsider Super Bowl lists, Pro-Football-Reference or Sports Reference box scores, ESPN, a major newspaper). Never write a spread, score or fact from memory. Skip any game where the result against the spread depends on which source's number is used, and skip pushes. Facts must be things known before the game, written without team, city or player names. Aim for three favorites and three underdogs covering per day, in a mixed order. Any sport with point spreads is fine (NFL, college football, NBA, college basketball). Never reuse a game. No betting advice and no sportsbook links.

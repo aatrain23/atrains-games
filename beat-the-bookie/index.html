@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beat the Bookie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../quiz.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><div class="logo">Beat the Bookie</div><div class="sub" id="sub">Today's set</div></div>
+    <div class="dots" id="dots" aria-label="Progress"></div>
+  </header>
+  <main id="play">
+    <div class="clock"><h1 id="rt"></h1><p id="rn"></p></div>
+    <div id="top"></div>
+    <p class="cap" id="cap" aria-live="polite"></p>
+    <div class="picks" id="body"></div>
+    <div class="verdict" id="verdict" hidden>
+      <h2 id="vh"></h2><p class="fact" id="fact"></p><p id="why"></p>
+      <p><a id="src" target="_blank" rel="noopener"></a></p>
+      <button class="primary" id="next"></button>
+    </div>
+  </main>
+  <main id="done" hidden>
+    <div class="verdict">
+      <div class="sub" id="rank"></div>
+      <div class="big"><span id="score">0</span><small>/6</small></div>
+      <div class="grid" id="grid" aria-hidden="true"></div>
+      <p class="muted" id="streak"></p>
+      <ul class="rows" id="rows"></ul>
+      <button class="primary" id="copy">Copy my score</button>
+      <button class="ghost" id="review">Play these again</button>
+      <p class="muted" style="margin:12px 0 0">Every game and point spread is real and linked on each one. Spreads are the commonly reported closing lines; books differed by half a point or so. For entertainment only. Not affiliated with any league, team or sportsbook.</p>
+    </div>
+  </main>
+  <p class="more"><a href="../">All games</a></p>
+</div>
+<script src="../quiz.js"></script>
+<script>
+Quiz.start({ name: "Beat the Bookie", slates: "BB_SLATES", latest: "BB_LATEST", key: "bb_daily", epoch: [2026, 11, 20],
+  ranks: ["Square", "Square", "Recreational bettor", "Recreational bettor", "Sharp", "Sharp", "The house fears you"],
+  good: "Winner", bad: "Losing ticket", next: "Next game",
+  head: function (r) { return [r.sport + " · " + r.when, r.event + ". The favorite is laying " + r.line + " points."] },
+  ask: function () { return "Who covers the spread?" },
+  build: function (r, body, pick, el) {
+    r.sides.forEach(function (s, j) { var b = el("button", "pick"), t = el("div", "tag"); t.appendChild(el("span", "", (j ? "Underdog +" : "Favorite -") + r.line)); t.appendChild(el("small", "", "")); b.appendChild(t);
+      b.appendChild(el("p", "lead", "Record: " + s.record)); var ul = el("ul"); s.facts.forEach(function (x) { ul.appendChild(el("li", "", x)) }); b.appendChild(ul); b.onclick = function () { pick(j) }; body.appendChild(b) }) },
+  reveal: function (r, j, body) {
+    [].forEach.call(body.children, function (b, n) { var s = r.sides[n]; b.disabled = true; b.querySelector(".tag span").textContent = s.team + (n ? " +" : " -") + r.line;
+      b.querySelector(".tag small").textContent = n === r.answer ? "Covered" : (n === j ? "Your pick" : "");
+      b.classList.add(n === r.answer ? "best" : (n === j ? "miss" : "dim")) }) },
+  result: function (r, ok, j) { return "You took the " + (j ? "underdog" : "favorite") + ", " + r.sides[j].team + "." },
+  row: function (r) { return [r.sport + " " + r.when, r.sides[r.answer].team + (r.answer ? " +" : " -") + r.line] } });
+</script>
+</body>
+</html>
