@@ -8,6 +8,7 @@ A static GitHub Pages site with a home screen and one folder per game. No build 
 - `youre-the-ref/slates/day-N.js`: the six plays for day N. Day 2 was 19 Nov 2026 in US Eastern time, and N goes up by one each calendar day. The site loads today's file at midnight Eastern; if it is missing, it falls back to the newest earlier day. So publishing tomorrow's file tonight is safe: it does not appear until midnight.
   Older instructions written before 20 Nov 2026 call these files `slates/day-N.js`, `slates/latest.js` and `index.html`; they mean the ones inside `youre-the-ref/`. There is no `slates/` folder at the root, and none should be created.
 - `call-the-play/`: the second game (see the last section).
+- `draft-room/`: the third game (see its section at the end).
 - `leaderboard/Code.gs`: the Google Apps Script behind the You're the Ref leaderboard (already deployed; do not change).
 - `tools/check.js`: `node tools/check.js` validates every You're the Ref slate. Must pass before pushing.
 - `tools/stills.py`: `python3 tools/stills.py N /tmp/out` screenshots You're the Ref day N in headless Chrome (optional, needs playwright). Add a third argument `call-the-play/` for the other game.
@@ -75,3 +76,18 @@ Rules for every Call the Play decision:
 3. Mix the answers so the bold choice is not always right: include at least one play per slate where the conservative call is correct.
 4. Never reuse a decision type with the same situation from an earlier slate. No real player, coach or team names in the play (a "real game behind this one" note without names is fine).
 5. Same wording rules as the main game: plain language, no em dashes, the length limits above.
+
+## Draft Room (third game, in `draft-room/`)
+
+You're on the clock: each round shows three real prospects from the same NFL draft and position, identified only as Prospect A, B and C with their pre-draft numbers. The player picks one; the reveal shows names, schools, where each was drafted and their NFL careers. No animation and no engine: `draft-room/index.html` is a standalone page.
+
+- `draft-room/slates/day-N.js` registers six rounds on `window.DR_SLATES[N]`; `draft-room/slates/latest.js` sets `window.DR_LATEST`. Day 1 was 20 Nov 2026 US Eastern, with the same midnight switch and fallback as the other games. `node tools/check-dr.js` validates the slates.
+- Round format: `{ id: "2017-qb", year, pos: "Quarterbacks", note: "one line on where they were picked, without saying who", answer: index of the best career, prospects: [three of { name, school, pick: "No. 10 overall, Kansas City Chiefs", pre: [3 to 5 short pre-draft lines], career: "one line of career stats and honors" }], why: "the lesson, 1 or 2 sentences", src: { url, label } }`.
+
+Rules for every round:
+1. NFL only. Three players from the same draft class and position, drafted close together (same round, or adjacent rounds when the story is good). Never reuse a round (same year and position) or a player from an earlier slate.
+2. Only use trios where one career is clearly the best (awards, All-Pros, or a large gap in production). Skip close calls and skip players drafted in the last three years.
+3. Look up every number by web search before writing: Wikipedia player pages (pre-draft measurables and college stats tables), Pro-Football-Reference, NFL.com or ESPN. Never write a measurement, stat or award from memory. If sources disagree on a 40 time, use the combine figure and prefer the player's Wikipedia table.
+4. `pre` lines must not reveal the player: no name, school, conference, team or award name. Give all three prospects the same kinds of lines so they can be compared.
+5. Put the prospects in a mixed order (not draft order) and vary which letter is the answer across the six rounds.
+6. Football facts only. Nothing about injuries off the field, arrests or personal lives; avoid trios where that is the main story. Plain wording, no em dashes. Say which season the career lines run through in the file's top comment.

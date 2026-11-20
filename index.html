@@ -32,11 +32,12 @@
   <main class="games">
     <a class="game" href="youre-the-ref/"><h2>You're the Ref</h2><p>Six real plays, six obscure rules. Watch the play, then make the ruling.</p><div class="meta"><span id="m-ytr">&nbsp;</span><span class="go">Play</span></div></a>
     <a class="game" href="call-the-play/"><h2>Call the Play</h2><p>You're the coach. Six big decisions a day, mostly football plus one from another sport. See if the numbers agree.</p><div class="meta"><span id="m-ctp">&nbsp;</span><span class="go">Play</span></div></a>
+    <a class="game" href="draft-room/"><h2>Draft Room</h2><p>You're on the clock. Three real prospects from a past NFL draft, shown only by their pre-draft numbers. Pick the best career.</p><div class="meta"><span id="m-dr">&nbsp;</span><span class="go">Play</span></div></a>
   </main>
 </div>
 <script>
 (function(){
-  /* Shows each game's current day and, once played today, the score. Day numbers: You're the Ref day 2 = 19 Nov 2026, Call the Play day 1 = 20 Nov 2026 (US Eastern). */
+  /* Shows each game's current day and, once played today, the score. Day numbers: You're the Ref day 2 = 19 Nov 2026, Call the Play and Draft Room day 1 = 20 Nov 2026 (US Eastern). */
   function days(y,m,d){try{var s=new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date()).split("-");
     return Math.round((Date.UTC(+s[0],+s[1]-1,+s[2])-Date.UTC(y,m,d))/864e5)}catch(e){return 0}}
   function card(id,src,latestVar,today,key){var l=document.createElement("script");l.src=src+"?v="+Math.floor(Date.now()/6e5);
@@ -45,6 +46,7 @@
     document.head.appendChild(l)}
   card("m-ytr","youre-the-ref/slates/latest.js","YTR_LATEST",2+days(2026,10,19),"ytr_daily");
   card("m-ctp","call-the-play/slates/latest.js","CTP_LATEST",1+days(2026,10,20),"ctp_daily");
+  card("m-dr","draft-room/slates/latest.js","DR_LATEST",1+days(2026,10,20),"dr_daily");
 })();
 </script>
 </body>

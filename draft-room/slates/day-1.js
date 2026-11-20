@@ -1,0 +1,87 @@
+/* Draft Room: Day 1 slate. See CLAUDE.md for the format. Careers are through the 2025 season. */
+(window.DR_SLATES = window.DR_SLATES || {})[1] = [
+  { id: "2017-qb", year: 2017, pos: "Quarterbacks", note: "All three went in the top 12 picks.", answer: 2,
+    prospects: [
+      { name: "Deshaun Watson", school: "Clemson", pick: "No. 12 overall, Houston Texans",
+        pre: ["6'2\", 221 lb", "40-yard dash: 4.66", "Last college season: 4,593 yds, 41 TD, 17 INT", "Also ran for 629 yds, 9 TD"],
+        career: "17,904 pass yds, 123 TD in 72 starts. 3 Pro Bowls." },
+      { name: "Mitchell Trubisky", school: "North Carolina", pick: "No. 2 overall, Chicago Bears",
+        pre: ["6'2\", 222 lb", "40-yard dash: 4.67", "Last college season: 3,748 yds, 30 TD, 6 INT", "Also ran for 308 yds, 5 TD"],
+        career: "13,028 pass yds, 78 TD in 58 starts. 1 Pro Bowl." },
+      { name: "Patrick Mahomes", school: "Texas Tech", pick: "No. 10 overall, Kansas City Chiefs",
+        pre: ["6'2\", 225 lb", "40-yard dash: 4.80", "Last college season: 5,052 yds, 41 TD, 10 INT", "Also ran for 260 yds, 12 TD"],
+        career: "35,939 pass yds, 267 TD in 126 starts. 2 MVPs, 3 Super Bowl wins, 6 Pro Bowls." }
+    ],
+    why: "The slowest of the three, and the second one picked, became a two-time MVP and three-time champion. The quarterback taken eight picks ahead of him has made 58 starts.",
+    src: { url: "https://en.wikipedia.org/wiki/2017_NFL_draft", label: "2017 NFL draft (Wikipedia)" } },
+  { id: "2020-wr", year: 2020, pos: "Wide receivers", note: "Picks 15, 21 and 22 of the first round.", answer: 0,
+    prospects: [
+      { name: "Justin Jefferson", school: "LSU", pick: "No. 22 overall, Minnesota Vikings",
+        pre: ["6'1\", 202 lb", "40-yard dash: 4.43", "Vertical jump: 37.5 in", "Last college season: 111 catches, 1,540 yds, 18 TD"],
+        career: "579 catches, 8,480 yds, 42 TD. 2022 Offensive Player of the Year, 4 Pro Bowls, 2 first-team All-Pros." },
+      { name: "Jerry Jeudy", school: "Alabama", pick: "No. 15 overall, Denver Broncos",
+        pre: ["6'1\", 193 lb", "40-yard dash: 4.45", "Vertical jump: 35 in", "Last college season: 77 catches, 1,163 yds, 10 TD"],
+        career: "351 catches, 4,884 yds, 17 TD. 1 Pro Bowl." },
+      { name: "Jalen Reagor", school: "TCU", pick: "No. 21 overall, Philadelphia Eagles",
+        pre: ["5'11\", 206 lb", "40-yard dash: 4.47", "Vertical jump: 42 in", "Last college season: 43 catches, 611 yds, 5 TD"],
+        career: "86 catches, 1,037 yds, 4 TD." }
+    ],
+    why: "The last of the three off the board had the biggest college season and then the biggest career. Philadelphia took Reagor one pick before Minnesota took Jefferson.",
+    src: { url: "https://en.wikipedia.org/wiki/Justin_Jefferson", label: "Justin Jefferson (Wikipedia)" } },
+  { id: "2011-de", year: 2011, pos: "Defensive ends", note: "Picks 11, 14 and 20 of the first round.", answer: 1,
+    prospects: [
+      { name: "Robert Quinn", school: "North Carolina", pick: "No. 14 overall, St. Louis Rams",
+        pre: ["6'4\", 265 lb", "40-yard dash: 4.62", "Bench press: 22 reps", "Last season played (2009): 19 tackles for loss, 11 sacks", "Sat out all of 2010"],
+        career: "102 sacks in 12 seasons. 3 Pro Bowls, 1 first-team All-Pro." },
+      { name: "J.J. Watt", school: "Wisconsin", pick: "No. 11 overall, Houston Texans",
+        pre: ["6'5\", 290 lb", "40-yard dash: 4.84", "Bench press: 34 reps", "Last college season: 21 tackles for loss, 7 sacks"],
+        career: "114.5 sacks in 12 seasons. 3-time Defensive Player of the Year, 5 first-team All-Pros." },
+      { name: "Adrian Clayborn", school: "Iowa", pick: "No. 20 overall, Tampa Bay Buccaneers",
+        pre: ["6'3\", 281 lb", "40-yard dash: 4.78", "Bench press: 17 reps", "Last college season: 7 tackles for loss, 3.5 sacks"],
+        career: "40 sacks in 10 seasons." }
+    ],
+    why: "Quinn was the quicker edge rusher and had a fine career with 102 sacks. But the 290-pound end with 34 bench reps won Defensive Player of the Year three times.",
+    src: { url: "https://en.wikipedia.org/wiki/J._J._Watt", label: "J.J. Watt (Wikipedia)" } },
+  { id: "2013-te", year: 2013, pos: "Tight ends", note: "One went in each of the first three rounds.", answer: 0,
+    prospects: [
+      { name: "Travis Kelce", school: "Cincinnati", pick: "No. 63 overall (round 3), Kansas City Chiefs",
+        pre: ["6'5\", 255 lb", "40-yard dash: 4.61", "Vertical jump: 35 in", "Last college season: 45 catches, 722 yds, 8 TD"],
+        career: "1,080 catches, 13,002 yds, 82 TD. 3 Super Bowl wins, 11 Pro Bowls, 4 first-team All-Pros." },
+      { name: "Tyler Eifert", school: "Notre Dame", pick: "No. 21 overall (round 1), Cincinnati Bengals",
+        pre: ["6'6\", 250 lb", "40-yard dash: 4.68", "Vertical jump: 35.5 in", "Last college season: 50 catches, 685 yds, 4 TD", "Won the award for the nation's best tight end"],
+        career: "221 catches, 2,501 yds, 26 TD in 8 seasons. 1 Pro Bowl." },
+      { name: "Zach Ertz", school: "Stanford", pick: "No. 35 overall (round 2), Philadelphia Eagles",
+        pre: ["6'5\", 249 lb", "40-yard dash: 4.67", "Vertical jump: 35.5 in", "Last college season: 69 catches, 898 yds, 6 TD"],
+        career: "825 catches, 8,592 yds, 57 TD. 1 Super Bowl win, 3 Pro Bowls." }
+    ],
+    why: "They were drafted in the reverse order of their careers. The third-rounder with the fewest catches in his last college season ended up with more than 13,000 yards.",
+    src: { url: "https://en.wikipedia.org/wiki/Travis_Kelce", label: "Travis Kelce (Wikipedia)" } },
+  { id: "2008-rb", year: 2008, pos: "Running backs", note: "Picks 4, 23 and 24 of the first round.", answer: 2,
+    prospects: [
+      { name: "Rashard Mendenhall", school: "Illinois", pick: "No. 23 overall, Pittsburgh Steelers",
+        pre: ["5'10\", 225 lb", "40-yard dash: 4.45", "Last college season: 1,681 rush yds, 6.4 a carry, 17 TD", "Caught 34 passes for 318 yds"],
+        career: "4,236 rush yds, 37 TD in 6 seasons. Best year: 1,273 yds." },
+      { name: "Darren McFadden", school: "Arkansas", pick: "No. 4 overall, Oakland Raiders",
+        pre: ["6'1\", 211 lb", "40-yard dash: 4.33", "Last college season: 1,830 rush yds, 5.6 a carry, 16 TD", "Caught 21 passes for 164 yds"],
+        career: "5,421 rush yds, 28 TD in 10 seasons. Best year: 1,157 yds." },
+      { name: "Chris Johnson", school: "East Carolina", pick: "No. 24 overall, Tennessee Titans",
+        pre: ["5'11\", 197 lb", "40-yard dash: 4.24", "Last college season: 1,423 rush yds, 6.0 a carry, 17 TD", "Caught 37 passes for 528 yds"],
+        career: "9,651 rush yds, 55 TD in 10 seasons. Ran for 2,006 yds in 2009. 3 Pro Bowls, 1 first-team All-Pro." }
+    ],
+    why: "The lightest back of the three, taken 20 picks after McFadden, ran a 4.24 and then ran for 2,006 yards in his second season.",
+    src: { url: "https://en.wikipedia.org/wiki/Chris_Johnson_(running_back)", label: "Chris Johnson (Wikipedia)" } },
+  { id: "2018-qb", year: 2018, pos: "Quarterbacks", note: "All three went in the top 10 picks.", answer: 1,
+    prospects: [
+      { name: "Josh Rosen", school: "UCLA", pick: "No. 10 overall, Arizona Cardinals",
+        pre: ["6'4\", 226 lb", "40-yard dash: 4.92", "Hand size: 9 7/8 in", "Last college season: 3,756 yds, 26 TD, 10 INT", "Completed 62.6% of his passes"],
+        career: "2,864 pass yds, 12 TD, 21 INT in 16 starts." },
+      { name: "Josh Allen", school: "Wyoming", pick: "No. 7 overall, Buffalo Bills",
+        pre: ["6'5\", 237 lb", "40-yard dash: 4.75", "Hand size: 10 1/8 in", "Last college season: 1,812 yds, 16 TD, 6 INT", "Completed 56.3% of his passes"],
+        career: "30,102 pass yds, 220 TD in 127 starts. 2024 MVP, 4 Pro Bowls." },
+      { name: "Sam Darnold", school: "USC", pick: "No. 3 overall, New York Jets",
+        pre: ["6'3\", 221 lb", "40-yard dash: 4.85", "Hand size: 9 3/8 in", "Last college season: 4,143 yds, 26 TD, 13 INT", "Completed 63.1% of his passes"],
+        career: "20,431 pass yds, 123 TD in 90 starts. 1 Super Bowl win, 2 Pro Bowls." }
+    ],
+    why: "The passer with the worst college numbers by far became the MVP. Darnold did not make a Pro Bowl until 2024, and Rosen made only 16 starts.",
+    src: { url: "https://en.wikipedia.org/wiki/Josh_Allen", label: "Josh Allen (Wikipedia)" } }
+];
