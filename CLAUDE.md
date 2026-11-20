@@ -11,7 +11,7 @@ A static GitHub Pages site (https://aatrain23.github.io/youre-the-ref/). No buil
 
 ## Adding a day
 
-Create `slates/day-N.js` with exactly six plays in this order: NFL, NBA, NHL, MLB, PGA, LAX (men's lacrosse). Copy the structure of the newest existing slate.
+Create `slates/day-N.js` and set `window.YTR_LATEST = N` in `slates/latest.js`. The slate has exactly six plays in this order: NFL, NBA, NHL, MLB, PGA, LAX (men's lacrosse). Copy the structure of the newest existing slate. (The site shows day min(today, YTR_LATEST), so raising YTR_LATEST early does not reveal the new day before midnight.)
 
 Rules for every play:
 1. Pick a real, counter-intuitive or obscure rule. Never reuse a rule already used in any earlier slate (read the earlier slate files first).

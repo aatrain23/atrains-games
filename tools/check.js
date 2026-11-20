@@ -22,4 +22,5 @@ for(const f of fs.readdirSync(dir).filter(f=>/^day-\d+\.js$/.test(f)).sort((a,b)
     if(p.clip&&!/^https:\/\//.test(p.clip.url))e('clip url must be https');
   }
 }
+require(path.join(dir,'latest.js'));const mx=Math.max(...Object.keys(window.YTR_SLATES).map(Number));if(window.YTR_LATEST!==mx){bad++;console.log('slates/latest.js says '+window.YTR_LATEST+' but the newest slate is day '+mx)}
 console.log(bad?bad+' problem(s)':'All slates OK ('+Object.keys(window.YTR_SLATES).length+' days)');process.exit(bad?1:0);

@@ -164,7 +164,9 @@ function startGame(DAY,P){
     var s=document.createElement("script");s.src="slates/day-"+n+".js?v="+n;
     s.onload=function(){var P=(window.YTR_SLATES||{})[n];if(P&&P.length)startGame(n,P);else tryDay(n-1,left-1)};
     s.onerror=function(){tryDay(n-1,left-1)};document.head.appendChild(s)}
-  var q=+new URLSearchParams(location.search).get("day");tryDay(q>0?q:Math.max(1,todayN()),400);
+  var q=+new URLSearchParams(location.search).get("day"),l=document.createElement("script");
+  function go(){var latest=window.YTR_LATEST||todayN();tryDay(q>0?Math.min(q,latest):Math.max(1,Math.min(todayN(),latest)),30)}
+  l.src="slates/latest.js?v="+Math.floor(Date.now()/6e5);l.onload=go;l.onerror=go;document.head.appendChild(l);
 })();
 </script>
 </body>
