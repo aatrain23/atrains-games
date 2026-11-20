@@ -63,7 +63,7 @@ Live at https://aatrain23.github.io/youre-the-ref/call-the-play/ . Same engine (
 - `call-the-play/index.html`: the game page (a copy of the main page with a situation strip and no leaderboard). `call-the-play/slates/day-N.js` registers on `window.CTP_SLATES[N]`; `call-the-play/slates/latest.js` sets `window.CTP_LATEST`. Day 1 was 20 Nov 2026 US Eastern; N goes up by one per calendar day, with the same midnight switch and fallback as the main game.
 - `node tools/check-ctp.js` validates these slates. Screenshots: `python3 tools/stills.py N /tmp/out call-the-play/`.
 - A slate is six plays: five NFL (`sport: "nfl"`) then one from another sport (so far NBA). `league` is a short tag shown on the progress chips, for example "4TH", "2PT", "CLOCK", "PAT", "GOAL", "NBA".
-- Extra required fields: `sit: [clock, score, down and spot]` (three short strings shown above the field, describing the moment the animation starts) and `clip: { url, label }` linking the source article or study.
+- Extra required fields: `sit: [clock, score, down and spot]` (three short strings shown above the field, describing the moment the animation starts) and `clip: { url, label }` linking the source article or study. Also required: `to: [blue, red]`, the timeouts each team has left, shown as a fourth chip. Choose timeouts that fit the source's reasoning (for example, a clock-killing answer needs the defense short on timeouts) and use the source's real numbers when it gives them.
 - `law` holds the source name (for example "NFL Next Gen Stats Decision Guide"); `why` gives the numbers from that source; `twist` says what would change the call.
 
 Rules for every Call the Play decision:

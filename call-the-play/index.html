@@ -128,7 +128,7 @@ function startGame(DAY,P){
     $("vh").textContent=ok?"Right call":"The numbers disagree";$("vh").style.color=ok?"var(--green)":"var(--red)";
     $("why").textContent=p.why;$("law").textContent=p.law;$("twist").textContent=p.twist;var a=$("clip");if(p.clip){a.href=p.clip.url;a.textContent=p.clip.label+" ↗";a.hidden=false}else a.hidden=true;$("next").textContent=i===P.length-1?"See my score":"Next play";
     $("verdict").hidden=false;dots();$("next").focus({preventScroll:true})}
-  function load(){$("sit").textContent="";(P[i].sit||[]).forEach(function(x){var e=document.createElement("span");e.textContent=x;$("sit").appendChild(e)});answered=false;$("verdict").hidden=true;$("sub").textContent="Day "+DAY+"  ·  "+P[i].title;dots();run(false)}
+  function load(){$("sit").textContent="";(P[i].sit||[]).forEach(function(x){var e=document.createElement("span");e.textContent=x;$("sit").appendChild(e)});if(P[i].to){var o=document.createElement("span");o.textContent="Timeouts: Blue "+P[i].to[0]+" · Red "+P[i].to[1];$("sit").appendChild(o)}answered=false;$("verdict").hidden=true;$("sub").textContent="Day "+DAY+"  ·  "+P[i].title;dots();run(false)}
   function grid(){return res.map(function(r){return r?"🟩":"🟥"}).join("")}
   function finish(){
     var n=res.filter(Boolean).length,ranks=["Fired at halftime","Armchair coach","Position coach","Position coach","Coordinator","Coordinator","Head coach"];

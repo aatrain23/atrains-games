@@ -8,7 +8,7 @@ for(const f of fs.readdirSync(dir).filter(f=>/^day-\d+\.js$/.test(f)).sort((a,b)
   if(P.filter(p=>p.sport==='nfl').length!==5||P[5].sport==='nfl'||!SPORTS.includes(P[5].sport))err('needs five nfl plays then one play from another sport');
   for(const p of P){const e=m=>err(p.id+': '+m);
     for(const k of['sit','clip','id','sport','league','title','dur','view','setup','caps','after','actors','ball','options','answer','stamp','why','law','twist'])if(p[k]===undefined)e('missing '+k);
-    if(!Array.isArray(p.sit)||p.sit.length!==3)e('sit must be [clock, score, down or spot]');if(!p.clip||!p.clip.label)e('clip must link the source');if(seen[p.id])e('id already used in '+seen[p.id]);seen[p.id]=f;
+    if(!Array.isArray(p.sit)||p.sit.length!==3)e('sit must be [clock, score, down or spot]');if(!Array.isArray(p.to)||p.to.length!==2||p.to.some(n=>!(n>=0&&n<=7)))e('to must be [blue timeouts, red timeouts]');if(!p.clip||!p.clip.label)e('clip must link the source');if(seen[p.id])e('id already used in '+seen[p.id]);seen[p.id]=f;
     if(!(p.answer>=0&&p.answer<p.options.length))e('answer index out of range');
     if(p.options.length<2||p.options.length>3)e('2 or 3 options');
     if(p.options.some(o=>o.length>34))e('option over 34 characters');
