@@ -55,3 +55,20 @@ Keep the ball's path clear of players it is not supposed to touch, keep every ac
 ## Before pushing
 
 Run `node tools/check.js`. If Chrome and playwright are available, run `tools/stills.py` for the new day and look at the images. Commit and push to `main`. Do not change the leaderboard address in `index.html`.
+
+## Call the Play (second game, in `call-the-play/`)
+
+Live at https://aatrain23.github.io/youre-the-ref/call-the-play/ . Same engine (`../engine.js`), same play format and coordinates, but the player is the coach: each play sets up a decision (go for it, punt, kick, go for 2, clock management) and the right answer is the one published win-probability research favors.
+
+- `call-the-play/index.html`: the game page (a copy of the main page with a situation strip and no leaderboard). `call-the-play/slates/day-N.js` registers on `window.CTP_SLATES[N]`; `call-the-play/slates/latest.js` sets `window.CTP_LATEST`. Day 1 was 20 Nov 2026 US Eastern; N goes up by one per calendar day, with the same midnight switch and fallback as the main game.
+- `node tools/check-ctp.js` validates these slates. Screenshots: `python3 tools/stills.py N /tmp/out call-the-play/`.
+- A slate is six plays: five NFL (`sport: "nfl"`) then one from another sport (so far NBA). `league` is a short tag shown on the progress chips, for example "4TH", "2PT", "CLOCK", "PAT", "GOAL", "NBA".
+- Extra required fields: `sit: [clock, score, down and spot]` (three short strings shown above the field, describing the moment the animation starts) and `clip: { url, label }` linking the source article or study.
+- `law` holds the source name (for example "NFL Next Gen Stats Decision Guide"); `why` gives the numbers from that source; `twist` says what would change the call.
+
+Rules for every Call the Play decision:
+1. Only use spots where a published model or study clearly favors one option, and find and read that source by web search before writing. Good sources: NFL Next Gen Stats Decision Guide articles on nfl.com, ESPN Analytics articles, peer-reviewed or arXiv studies. Never state a win probability or percentage from memory.
+2. Match the situation to the source (score margin, time left, down, distance, yard line). Quote only numbers the source gives. Skip toss-ups (edges under about 2%).
+3. Mix the answers so the bold choice is not always right: include at least one play per slate where the conservative call is correct.
+4. Never reuse a decision type with the same situation from an earlier slate. No real player, coach or team names in the play (a "real game behind this one" note without names is fine).
+5. Same wording rules as the main game: plain language, no em dashes, the length limits above.

@@ -21,6 +21,7 @@
   .stage{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000}
   canvas{display:block;width:100%;height:auto}
   .ghost{position:absolute;right:10px;top:10px;background:rgba(0,0,0,.66);border:1px solid var(--line);border-radius:8px;padding:5px 11px;font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.5px;text-transform:uppercase;color:var(--chalk);cursor:pointer}
+  .more{display:block;text-align:center;margin:18px 0 0;color:var(--muted);font-size:14px} .more a{color:var(--yellow);font-weight:600}
   .cap{min-height:52px;margin:12px 2px 10px;font-size:18px;font-weight:600;text-wrap:balance}
   .cap.q{color:var(--yellow)}
   .calls{display:grid;gap:8px}
@@ -93,6 +94,7 @@
       <ol class="lbl" id="lblist"></ol><p class="muted" id="lbmsg" style="margin:8px 0 0"></p>
     </section>
   </main>
+  <p class="more">More games: <a href="call-the-play/">Call the Play</a></p>
 </div>
 <script src="engine.js"></script>
 <script>
