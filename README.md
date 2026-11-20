@@ -1,7 +1,8 @@
-# You're the Ref
+# Atrain's Games
 
-A daily sports-rulings game: watch the play, make the call, see the official ruling. One call each from the NFL, NBA, NHL, MLB, PGA and lacrosse, with a new set at midnight Eastern.
+Daily sports games on one static site: a home screen (`index.html`) and one folder per game.
 
-Live at https://aatrain23.github.io/youre-the-ref/ . See `CLAUDE.md` for how the files fit together and how a new day is added.
+- `youre-the-ref/`: You're the Ref. Six real plays, six obscure rules.
+- `call-the-play/`: Call the Play. You're the coach; see if the numbers agree.
 
-Plays are illustrations, not real games. Not affiliated with any league.
+See `CLAUDE.md` for how the site and the daily slates work.

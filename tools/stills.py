@@ -1,4 +1,4 @@
-"""Screenshots each play of a day at its final frame + verdict, for a visual check. Usage: python3 tools/stills.py <day> <outdir> [call-the-play/]
+"""Screenshots each play of a day at its final frame + verdict, for a visual check. Usage: python3 tools/stills.py <day> <outdir> [game folder, default youre-the-ref/]
 Needs playwright and Chrome (/usr/bin/google-chrome). Skip if unavailable; run tools/check.js regardless."""
 import sys, os, threading, http.server, functools
 from playwright.sync_api import sync_playwright
@@ -9,7 +9,7 @@ srv = http.server.ThreadingHTTPServer(("127.0.0.1", 8765), h); threading.Thread(
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path="/usr/bin/google-chrome"); pg = b.new_page(viewport={"width": 420, "height": 900}); errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
-    sub = sys.argv[3] if len(sys.argv) > 3 else ""; pg.goto(f"http://127.0.0.1:8765/{sub}index.html?day={day}"); pg.wait_for_function("window.__ytr", timeout=15000)
+    sub = sys.argv[3] if len(sys.argv) > 3 else "youre-the-ref/"; pg.goto(f"http://127.0.0.1:8765/{sub}index.html?day={day}"); pg.wait_for_function("window.__ytr", timeout=15000)
     n = pg.evaluate("document.querySelectorAll('#dots .dot').length")
     for i in range(n):
         pg.evaluate("__ytr.skip()"); pg.wait_for_timeout(150); pg.screenshot(path=f"{out}/play{i+1}_end.png")

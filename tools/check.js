@@ -1,6 +1,6 @@
 // Validates slate files. Usage: node tools/check.js            (all days)
 const fs=require('fs'),path=require('path');global.window={};
-const dir=path.join(__dirname,'..','slates');let bad=0;const seen={};
+const dir=path.join(__dirname,'..','youre-the-ref','slates');let bad=0;const seen={};
 const SPORTS=['nfl','nba','nhl','mlb','pga','lax'];
 for(const f of fs.readdirSync(dir).filter(f=>/^day-\d+\.js$/.test(f)).sort((a,b)=>parseInt(a.slice(4))-parseInt(b.slice(4)))){
   require(path.join(dir,f));const n=+f.match(/\d+/)[0],P=window.YTR_SLATES[n];const err=m=>{bad++;console.log(f+': '+m)};

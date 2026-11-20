@@ -1,17 +1,19 @@
-# You're the Ref: how this repo works
+# Atrain's Games: how this repo works
 
-A static GitHub Pages site (https://aatrain23.github.io/youre-the-ref/). No build step.
+A static GitHub Pages site with a home screen and one folder per game. No build step. (The repository is still named `youre-the-ref`, so the site is at https://aatrain23.github.io/youre-the-ref/ until it is renamed. All links inside the site are relative, so a rename needs no code change.)
 
-- `index.html`: the game UI, leaderboard client and the day loader. Opened with no parameters it shows the home screen (cards for both games); `?play=1` starts You're the Ref and `?day=N` previews a day.
-- `engine.js`: draws the six playing surfaces and plays keyframed scenarios. Do not change it for a routine new day.
-- `slates/day-N.js`: the six plays for day N. Day 2 was 19 Nov 2026 in US Eastern time, and N goes up by one each calendar day. The site loads today's file at midnight Eastern; if it is missing, it falls back to the newest earlier day. So publishing tomorrow's file tonight is safe: it does not appear until midnight.
-- `leaderboard/Code.gs`: the Google Apps Script behind the leaderboard (already deployed; do not change).
-- `tools/check.js`: `node tools/check.js` validates every slate. Must pass before pushing.
-- `tools/stills.py`: `python3 tools/stills.py N /tmp/out` screenshots day N in headless Chrome (optional, needs playwright; preview any day in a browser with `?day=N`).
+- `index.html`: the home screen, "Atrain's Games", with one card per game. Old `?play=1` and `?day=N` links redirect to You're the Ref. To add a game, give it a folder and add a card.
+- `engine.js`: shared by every game. Draws the six playing surfaces and plays keyframed scenarios. Do not change it for a routine new day.
+- `youre-the-ref/index.html`: the You're the Ref game UI, leaderboard client and day loader (preview any day with `?day=N`).
+- `youre-the-ref/slates/day-N.js`: the six plays for day N. Day 2 was 19 Nov 2026 in US Eastern time, and N goes up by one each calendar day. The site loads today's file at midnight Eastern; if it is missing, it falls back to the newest earlier day. So publishing tomorrow's file tonight is safe: it does not appear until midnight.
+- `call-the-play/`: the second game (see the last section).
+- `leaderboard/Code.gs`: the Google Apps Script behind the You're the Ref leaderboard (already deployed; do not change).
+- `tools/check.js`: `node tools/check.js` validates every You're the Ref slate. Must pass before pushing.
+- `tools/stills.py`: `python3 tools/stills.py N /tmp/out` screenshots You're the Ref day N in headless Chrome (optional, needs playwright). Add a third argument `call-the-play/` for the other game.
 
 ## Adding a day
 
-Create `slates/day-N.js` and set `window.YTR_LATEST = N` in `slates/latest.js`. The slate has exactly six plays in this order: NFL, NBA, NHL, MLB, PGA, LAX (men's lacrosse). Copy the structure of the newest existing slate. (The site shows day min(today, YTR_LATEST), so raising YTR_LATEST early does not reveal the new day before midnight.)
+Create `youre-the-ref/slates/day-N.js` and set `window.YTR_LATEST = N` in `youre-the-ref/slates/latest.js`. The slate has exactly six plays in this order: NFL, NBA, NHL, MLB, PGA, LAX (men's lacrosse). Copy the structure of the newest existing slate. (The site shows day min(today, YTR_LATEST), so raising YTR_LATEST early does not reveal the new day before midnight.)
 
 Rules for every play:
 1. Pick a real, counter-intuitive or obscure rule. Never reuse a rule already used in any earlier slate (read the earlier slate files first).
@@ -54,13 +56,13 @@ Keep the ball's path clear of players it is not supposed to touch, keep every ac
 
 ## Before pushing
 
-Run `node tools/check.js`. If Chrome and playwright are available, run `tools/stills.py` for the new day and look at the images. Commit and push to `main`. Do not change the leaderboard address in `index.html`.
+Run `node tools/check.js`. If Chrome and playwright are available, run `tools/stills.py` for the new day and look at the images. Commit and push to `main`. Do not change the leaderboard address in `youre-the-ref/index.html`.
 
 ## Call the Play (second game, in `call-the-play/`)
 
-Live at https://aatrain23.github.io/youre-the-ref/call-the-play/ . Same engine (`../engine.js`), same play format and coordinates, but the player is the coach: each play sets up a decision (go for it, punt, kick, go for 2, clock management) and the right answer is the one published win-probability research favors.
+In the `call-the-play/` folder of the site. Same engine (`../engine.js`), same play format and coordinates, but the player is the coach: each play sets up a decision (go for it, punt, kick, go for 2, clock management) and the right answer is the one published win-probability research favors.
 
-- `call-the-play/index.html`: the game page (a copy of the main page with a situation strip and no leaderboard). `call-the-play/slates/day-N.js` registers on `window.CTP_SLATES[N]`; `call-the-play/slates/latest.js` sets `window.CTP_LATEST`. Day 1 was 20 Nov 2026 US Eastern; N goes up by one per calendar day, with the same midnight switch and fallback as the main game.
+- `call-the-play/index.html`: the game page (a copy of the You're the Ref page with a situation strip and no leaderboard). `call-the-play/slates/day-N.js` registers on `window.CTP_SLATES[N]`; `call-the-play/slates/latest.js` sets `window.CTP_LATEST`. Day 1 was 20 Nov 2026 US Eastern; N goes up by one per calendar day, with the same midnight switch and fallback as the main game.
 - `node tools/check-ctp.js` validates these slates. Screenshots: `python3 tools/stills.py N /tmp/out call-the-play/`.
 - A slate is six plays: five NFL (`sport: "nfl"`) then one from another sport (so far NBA). `league` is a short tag shown on the progress chips, for example "4TH", "2PT", "CLOCK", "PAT", "GOAL", "NBA".
 - Extra required fields: `sit: [clock, score, down and spot]` (three short strings shown above the field, describing the moment the animation starts) and `clip: { url, label }` linking the source article or study. Also required: `to: [blue, red]`, the timeouts each team has left, shown as a fourth chip. Choose timeouts that fit the source's reasoning (for example, a clock-killing answer needs the defense short on timeouts) and use the source's real numbers when it gives them.
