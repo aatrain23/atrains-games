@@ -6,6 +6,7 @@ A static GitHub Pages site with a home screen and one folder per game. No build 
 - `engine.js`: shared by every game. Draws the six playing surfaces and plays keyframed scenarios. Do not change it for a routine new day.
 - `youre-the-ref/index.html`: the You're the Ref game UI, leaderboard client and day loader (preview any day with `?day=N`).
 - `youre-the-ref/slates/day-N.js`: the six plays for day N. Day 2 was 19 Nov 2026 in US Eastern time, and N goes up by one each calendar day. The site loads today's file at midnight Eastern; if it is missing, it falls back to the newest earlier day. So publishing tomorrow's file tonight is safe: it does not appear until midnight.
+  Older instructions written before 20 Nov 2026 call these files `slates/day-N.js`, `slates/latest.js` and `index.html`; they mean the ones inside `youre-the-ref/`. There is no `slates/` folder at the root, and none should be created.
 - `call-the-play/`: the second game (see the last section).
 - `leaderboard/Code.gs`: the Google Apps Script behind the You're the Ref leaderboard (already deployed; do not change).
 - `tools/check.js`: `node tools/check.js` validates every You're the Ref slate. Must pass before pushing.
