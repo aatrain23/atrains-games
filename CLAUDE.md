@@ -2,7 +2,7 @@
 
 A static GitHub Pages site (https://aatrain23.github.io/youre-the-ref/). No build step.
 
-- `index.html`: the game UI, leaderboard client and the day loader.
+- `index.html`: the game UI, leaderboard client and the day loader. Opened with no parameters it shows the home screen (cards for both games); `?play=1` starts You're the Ref and `?day=N` previews a day.
 - `engine.js`: draws the six playing surfaces and plays keyframed scenarios. Do not change it for a routine new day.
 - `slates/day-N.js`: the six plays for day N. Day 2 was 19 Nov 2026 in US Eastern time, and N goes up by one each calendar day. The site loads today's file at midnight Eastern; if it is missing, it falls back to the newest earlier day. So publishing tomorrow's file tonight is safe: it does not appear until midnight.
 - `leaderboard/Code.gs`: the Google Apps Script behind the leaderboard (already deployed; do not change).

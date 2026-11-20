@@ -56,6 +56,13 @@
   .lbl{list-style:none;margin:0;padding:0;font-variant-numeric:tabular-nums}
   .lbl li{display:grid;grid-template-columns:30px 1fr auto auto;gap:10px;padding:7px 4px;border-top:1px solid var(--line);font-size:15px}
   .lbl li.me{color:var(--yellow);font-weight:700} .lbl .t{color:var(--muted)}
+  .games{display:grid;gap:12px;margin-top:6px}
+  .game{display:block;text-decoration:none;color:inherit;padding:18px 16px;border-radius:14px;background:var(--panel);border:2px solid var(--line)}
+  .game:hover,.game:focus-visible{border-color:var(--yellow);outline:none}
+  .game h2{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margin:0 0 6px;text-transform:uppercase;color:var(--yellow)}
+  .game p{margin:0 0 12px;color:var(--chalk)}
+  .game .meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+  .game .go{background:var(--yellow);color:#1a1606;border-radius:10px;padding:7px 14px;font-weight:800;font-size:20px}
   [hidden]{display:none!important}
   @media (prefers-reduced-motion:reduce){.call{transition:none}}
 </style>
@@ -66,6 +73,12 @@
     <div><div class="logo">You're the Ref</div><div class="sub" id="sub">Today's calls</div></div>
     <div class="dots" id="dots" aria-label="Progress"></div>
   </header>
+  <main id="home" hidden>
+    <div class="games">
+      <a class="game" href="?play=1"><h2>You're the Ref</h2><p>Six real plays, six obscure rules. Watch the play, then make the ruling.</p><div class="meta"><span id="hm1"></span><span class="go">Play</span></div></a>
+      <a class="game" href="call-the-play/"><h2>Call the Play</h2><p>You're the coach. Go for it, kick or punt? See if the numbers agree.</p><div class="meta"><span id="hm2"></span><span class="go">Play</span></div></a>
+    </div>
+  </main>
   <main id="play">
     <div class="stage"><canvas id="cv" width="720" height="820" role="img" aria-label="Animated diagram of the play"></canvas><button class="ghost" id="again" hidden>Watch again</button></div>
     <p class="cap" id="cap" aria-live="polite"></p>
@@ -94,7 +107,7 @@
       <ol class="lbl" id="lblist"></ol><p class="muted" id="lbmsg" style="margin:8px 0 0"></p>
     </section>
   </main>
-  <p class="more">More games: <a href="call-the-play/">Call the Play</a></p>
+  <p class="more" id="more"><a href="./">All games</a> · <a href="call-the-play/">Call the Play</a></p>
 </div>
 <script src="engine.js"></script>
 <script>
@@ -166,8 +179,16 @@ function startGame(DAY,P){
     var s=document.createElement("script");s.src="slates/day-"+n+".js?v="+n;
     s.onload=function(){var P=(window.YTR_SLATES||{})[n];if(P&&P.length)startGame(n,P);else tryDay(n-1,left-1)};
     s.onerror=function(){tryDay(n-1,left-1)};document.head.appendChild(s)}
-  var q=+new URLSearchParams(location.search).get("day"),l=document.createElement("script");
-  function go(){var latest=window.YTR_LATEST||todayN();tryDay(q>0?Math.min(q,latest):Math.max(1,Math.min(todayN(),latest)),30)}
+  var qs=new URLSearchParams(location.search),q=+qs.get("day"),l=document.createElement("script");
+  function home(){var $=function(i){return document.getElementById(i)},n=todayN();
+    function meta(id,day,key){var s=null;try{s=JSON.parse(localStorage.getItem(key))}catch(e){}
+      $(id).textContent="Day "+day+(s&&s.last===day&&s.first!==undefined?"  ·  You got "+s.first+"/6":"")}
+    document.title="You're the Ref and Call the Play";document.querySelector(".logo").textContent="Pick a game";$("sub").textContent="Daily sports calls";
+    $("play").hidden=true;$("more").hidden=true;$("home").hidden=false;
+    meta("hm1",Math.max(1,Math.min(n,window.YTR_LATEST||n)),"ytr_daily");
+    var c=document.createElement("script"),d=Math.max(1,n-2);c.src="call-the-play/slates/latest.js?v="+Math.floor(Date.now()/6e5);
+    c.onload=c.onerror=function(){meta("hm2",Math.max(1,Math.min(d,window.CTP_LATEST||d)),"ctp_daily")};document.head.appendChild(c)}
+  function go(){if(!(q>0)&&!qs.has("play")){home();return}var latest=window.YTR_LATEST||todayN();tryDay(q>0?Math.min(q,latest):Math.max(1,Math.min(todayN(),latest)),30)}
   l.src="slates/latest.js?v="+Math.floor(Date.now()/6e5);l.onload=go;l.onerror=go;document.head.appendChild(l);
 })();
 </script>
