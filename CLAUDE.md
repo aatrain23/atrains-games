@@ -9,6 +9,7 @@ A static GitHub Pages site with a home screen and one folder per game. No build 
   Older instructions written before 20 Nov 2026 call these files `slates/day-N.js`, `slates/latest.js` and `index.html`; they mean the ones inside `youre-the-ref/`. There is no `slates/` folder at the root, and none should be created.
 - `call-the-play/`: the second game (see the last section).
 - `draft-room/`: the third game (see its section at the end).
+- `trade-desk/` and `box-score/`: the fourth and fifth games. Both pages are thin configs over the shared `quiz.js` and `quiz.css` at the root (see the last section).
 - `leaderboard/Code.gs`: the Google Apps Script behind the You're the Ref leaderboard (already deployed; do not change).
 - `tools/check.js`: `node tools/check.js` validates every You're the Ref slate. Must pass before pushing.
 - `tools/stills.py`: `python3 tools/stills.py N /tmp/out` screenshots You're the Ref day N in headless Chrome (optional, needs playwright). Add a third argument `call-the-play/` for the other game.
@@ -91,3 +92,15 @@ Rules for every round:
 4. `pre` lines must not reveal the player: no name, school, conference, team or award name. Give all three prospects the same kinds of lines so they can be compared.
 5. Put the prospects in a mixed order (not draft order) and vary which letter is the answer across the six rounds.
 6. Football facts only. Nothing about injuries off the field, arrests or personal lives; avoid trios where that is the main story. Plain wording, no em dashes. Say which season the career lines run through in the file's top comment.
+
+## Trade Desk and Box Score Detective (in `trade-desk/` and `box-score/`)
+
+Both are card quizzes with no animation. Each page calls `Quiz.start({...})` from the shared `quiz.js` (day loader, progress, scoring, streak) and uses `quiz.css`; a game's own `index.html` only says how to draw a round and reveal it. Day 1 for both was 20 Nov 2026 US Eastern, with the same midnight switch and fallback as the other games. Six rounds a day.
+
+**Trade Desk**: a real past trade with names hidden; the player picks which team won it. `trade-desk/slates/day-N.js` registers on `window.TD_SLATES[N]`, `latest.js` sets `window.TD_LATEST`, and `node tools/check-td.js` validates.
+- Round: `{ id, sport: "NFL" | "NBA" | "MLB" | "NHL", year, note: "one line of context without team names", answer: 0 or 1, sides: [two of { team, gets: [1 to 4 lines describing what that team received, no names], after: "what that haul became, with names and numbers" }], why: "the lesson", src: { url, label } }`. The sides are shown as Team A and Team B.
+- Rules: only trades with a clear winner in hindsight, at least three years old. Look up the full package and the aftermath by web search (Wikipedia, league and team sites, the Sports Reference sites, major outlets); never write a detail from memory. `gets` and `note` describe players by age, position, honors and recent stats, never by name or team. Mix the sports and vary which side wins. Never reuse a trade. Sports facts only.
+
+**Box Score Detective**: one famous single-game stat line; the player picks whose it was from four options. `box-score/slates/day-N.js` registers on `window.BX_SLATES[N]`, `latest.js` sets `window.BX_LATEST`, and `node tools/check-bx.js` validates.
+- Round: `{ id, sport, year, clue: "one line of context that does not name the player or teams", q: "the question", line: [4 to 6 of ["Label", "value"]], options: [four names], answer: index, fact: "Final score · date", why: "1 or 2 sentences of context", src: { url, label } }`.
+- Rules: look up the exact line and game details by web search against a box score or the league's own account; never write a stat from memory. The three wrong options must be plausible players from the same era and position, and the line must fit only the right one. Mix the sports and the difficulty, and vary the answer position. Never reuse a game.
