@@ -34,6 +34,6 @@
     line: [["Points", "4"], ["Rebounds", "12"], ["Assists", "10"], ["Steals", "10"], ["Blocks", "5"]],
     options: ["Kawhi Leonard", "Andre Iguodala", "Paul George", "Draymond Green"], answer: 3,
     fact: "Warriors 122, Grizzlies 107 · Feb 10, 2017",
-    why: "It was the first triple-double in NBA history with fewer than 10 points. He finished one steal short of the league record of 11, and nobody else has had 10 steals and 5 blocks in a game.",
+    why: "It was the first triple-double in NBA history with fewer than 10 points. He was one steal short of the league record, and the first with 10 steals and 5 blocks in a game since both were first counted in 1973-74.",
     src: { url: "https://www.nba.com/news/warriors-draymond-green-records-historic-triple-double", label: "NBA.com" } }
 ];
