@@ -1,2 +1,2 @@
 /* The highest day number that has a slate file. Update this when adding a day. */
-window.CTP_LATEST = 2;
+window.CTP_LATEST = 3;
