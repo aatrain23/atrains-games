@@ -4,9 +4,5 @@ Daily sports games on one static site: a home screen (`index.html`) and one fold
 
 - `youre-the-ref/`: You're the Ref. Six real plays, six obscure rules.
 - `call-the-play/`: Call the Play. You're the coach: six decisions a day, mostly football plus one from another sport. See if the numbers agree.
-- `draft-room/`: Draft Room. Three real prospects from a past NFL draft; pick the best career.
-- `trade-desk/`: Trade Desk. A real trade with the names hidden; pick who won it.
-- `box-score/`: Box Score Detective. One famous stat line; work out whose it was.
-- `beat-the-bookie/`: Beat the Bookie. A real past game and its point spread; pick who covered.
 
 See `CLAUDE.md` for how the site and the daily slates work.

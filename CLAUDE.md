@@ -1,16 +1,14 @@
 # Atrain's Games: how this repo works
 
-A static GitHub Pages site with a home screen and one folder per game. No build step. (The repository is still named `youre-the-ref`, so the site is at https://aatrain23.github.io/youre-the-ref/ until it is renamed. All links inside the site are relative, so a rename needs no code change.)
+A static GitHub Pages site with a home screen and one folder per game. No build step. (The repository is `atrains-games`. All links inside the site are relative.)
 
+- Since 21 Nov 2026 the site has only two games, You're the Ref and Call the Play (Aidan removed Draft Room, Trade Desk, Box Score Detective and Beat the Bookie).
 - `index.html`: the home screen, "Atrain's Games", with one card per game. Old `?play=1` and `?day=N` links redirect to You're the Ref. To add a game, give it a folder and add a card.
 - `engine.js`: shared by every game. Draws the six playing surfaces and plays keyframed scenarios. Do not change it for a routine new day.
 - `youre-the-ref/index.html`: the You're the Ref game UI, leaderboard client and day loader (preview any day with `?day=N`).
 - `youre-the-ref/slates/day-N.js`: the six plays for day N. Day 2 was 19 Nov 2026 in US Eastern time, and N goes up by one each calendar day. The site loads today's file at midnight Eastern; if it is missing, it falls back to the newest earlier day. So publishing tomorrow's file tonight is safe: it does not appear until midnight.
   Older instructions written before 20 Nov 2026 call these files `slates/day-N.js`, `slates/latest.js` and `index.html`; they mean the ones inside `youre-the-ref/`. There is no `slates/` folder at the root, and none should be created.
 - `call-the-play/`: the second game (see the last section).
-- `draft-room/`: the third game (see its section at the end).
-- `beat-the-bookie/`: the sixth game, also on `quiz.js` (see the last section).
-- `trade-desk/` and `box-score/`: the fourth and fifth games. Both pages are thin configs over the shared `quiz.js` and `quiz.css` at the root (see the last section).
 - `leaderboard/Code.gs`: the Google Apps Script behind the You're the Ref leaderboard (already deployed; do not change).
 - `tools/check.js`: `node tools/check.js` validates every You're the Ref slate. Must pass before pushing.
 - `tools/stills.py`: `python3 tools/stills.py N /tmp/out` screenshots You're the Ref day N in headless Chrome (optional, needs playwright). Add a third argument `call-the-play/` for the other game.
@@ -78,37 +76,3 @@ Rules for every Call the Play decision:
 3. Mix the answers so the bold choice is not always right: include at least one play per slate where the conservative call is correct.
 4. Never reuse a decision type with the same situation from an earlier slate. No real player, coach or team names in the play (a "real game behind this one" note without names is fine).
 5. Same wording rules as the main game: plain language, no em dashes, the length limits above.
-
-## Draft Room (third game, in `draft-room/`)
-
-You're on the clock: each round shows three real prospects from the same NFL draft and position, identified only as Prospect A, B and C with their pre-draft numbers. The player picks one; the reveal shows names, schools, where each was drafted and their NFL careers. No animation and no engine: `draft-room/index.html` is a standalone page.
-
-- `draft-room/slates/day-N.js` registers six rounds on `window.DR_SLATES[N]`; `draft-room/slates/latest.js` sets `window.DR_LATEST`. Day 1 was 20 Nov 2026 US Eastern, with the same midnight switch and fallback as the other games. `node tools/check-dr.js` validates the slates.
-- Round format: `{ id: "2017-qb", year, pos: "Quarterbacks", note: "one line on where they were picked, without saying who", answer: index of the best career, prospects: [three of { name, school, pick: "No. 10 overall, Kansas City Chiefs", pre: [3 to 5 short pre-draft lines], career: "one line of career stats and honors" }], why: "the lesson, 1 or 2 sentences", src: { url, label } }`.
-
-Rules for every round:
-1. NFL only. Three players from the same draft class and position, drafted close together (same round, or adjacent rounds when the story is good). Never reuse a round (same year and position) or a player from an earlier slate.
-2. Only use trios where one career is clearly the best (awards, All-Pros, or a large gap in production). Skip close calls and skip players drafted in the last three years.
-3. Look up every number by web search before writing: Wikipedia player pages (pre-draft measurables and college stats tables), Pro-Football-Reference, NFL.com or ESPN. Never write a measurement, stat or award from memory. If sources disagree on a 40 time, use the combine figure and prefer the player's Wikipedia table.
-4. `pre` lines must not reveal the player: no name, school, conference, team or award name. Give all three prospects the same kinds of lines so they can be compared.
-5. Put the prospects in a mixed order (not draft order) and vary which letter is the answer across the six rounds.
-6. Football facts only. Nothing about injuries off the field, arrests or personal lives; avoid trios where that is the main story. Plain wording, no em dashes. Say which season the career lines run through in the file's top comment.
-
-## Trade Desk and Box Score Detective (in `trade-desk/` and `box-score/`)
-
-Both are card quizzes with no animation. Each page calls `Quiz.start({...})` from the shared `quiz.js` (day loader, progress, scoring, streak) and uses `quiz.css`; a game's own `index.html` only says how to draw a round and reveal it. Day 1 for both was 20 Nov 2026 US Eastern, with the same midnight switch and fallback as the other games. Six rounds a day.
-
-**Trade Desk**: a real past trade with names hidden; the player picks which team won it. `trade-desk/slates/day-N.js` registers on `window.TD_SLATES[N]`, `latest.js` sets `window.TD_LATEST`, and `node tools/check-td.js` validates.
-- Round: `{ id, sport: "NFL" | "NBA" | "MLB" | "NHL", year, note: "one line of context without team names", answer: 0 or 1, sides: [two of { team, gets: [1 to 4 lines describing what that team received, no names], after: "what that haul became, with names and numbers" }], why: "the lesson", src: { url, label } }`. The sides are shown as Team A and Team B.
-- Rules: only trades with a clear winner in hindsight, at least three years old. Look up the full package and the aftermath by web search (Wikipedia, league and team sites, the Sports Reference sites, major outlets); never write a detail from memory. `gets` and `note` describe players by age, position, honors and recent stats, never by name or team. Mix the sports and vary which side wins. Never reuse a trade. Sports facts only.
-
-**Box Score Detective**: one famous single-game stat line; the player picks whose it was from four options. `box-score/slates/day-N.js` registers on `window.BX_SLATES[N]`, `latest.js` sets `window.BX_LATEST`, and `node tools/check-bx.js` validates.
-- Round: `{ id, sport, year, clue: "one line of context that does not name the player or teams", q: "the question", line: [4 to 6 of ["Label", "value"]], options: [four names], answer: index, fact: "Final score · date", why: "1 or 2 sentences of context", src: { url, label } }`.
-- Rules: look up the exact line and game details by web search against a box score or the league's own account; never write a stat from memory. The three wrong options must be plausible players from the same era and position, and the line must fit only the right one. Mix the sports and the difficulty, and vary the answer position. Never reuse a game.
-
-## Beat the Bookie (in `beat-the-bookie/`)
-
-A famous past game with the teams hidden, the real point spread and a few facts a bettor knew before kickoff; the player picks whether the favorite or the underdog covered. Built on the shared `quiz.js` like Trade Desk. `beat-the-bookie/slates/day-N.js` registers on `window.BB_SLATES[N]`, `latest.js` sets `window.BB_LATEST`, and `node tools/check-bb.js` validates. Day 1 was 20 Nov 2026 US Eastern. Six games a day.
-
-- Round: `{ id, sport, when: "a decade, not the exact year", event: "Championship game", line: points the favorite is laying, answer: 0 if the favorite covered or 1 if the underdog did, sides: [favorite, underdog] each { team, record, facts: [2 to 4 pre-game facts, no names] }, fact: "Final score · game and date", why: "how it went, 1 or 2 sentences", src: { url, label } }`. Side 0 is always the favorite.
-- Rules: only real games whose closing spread is confirmed tonight by web search in at least one solid source (the game's Wikipedia article, the Las Vegas Review-Journal or VegasInsider Super Bowl lists, Pro-Football-Reference or Sports Reference box scores, ESPN, a major newspaper). Never write a spread, score or fact from memory. Skip any game where the result against the spread depends on which source's number is used, and skip pushes. Facts must be things known before the game, written without team, city or player names. Aim for three favorites and three underdogs covering per day, in a mixed order. Any sport with point spreads is fine (NFL, college football, NBA, college basketball). Never reuse a game. No betting advice and no sportsbook links.
