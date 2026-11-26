@@ -19,6 +19,10 @@ for(const f of fs.readdirSync(dir).filter(f=>/^day-\d+\.js$/.test(f)).sort((a,b)
     if(p.ball[p.ball.length-1][0]>p.dur+0.01)e('ball keyframe after dur');
     const last=p.caps[p.caps.length-1];if(p.caps[0][0]!==0||last[1]<p.dur)e('captions must cover 0..dur');
     const [x0,y0,x1,y1]=p.view;p.ball.forEach(k=>{if(k[0]>0&&(k[1]<x0-8*(x1-x0)/50||k[1]>x1+8*(x1-x0)/50||k[2]<y0-8*(y1-y0)/50||k[2]>y1+8*(y1-y0)/50))e('ball far outside view at t='+k[0])});
+    if(p.sport==='mlb'){const fld=p.actors.filter(a=>!a.shape&&(a.team==='a'||a.team==='b')).reduce((m,a)=>{(m[a.team]=m[a.team]||[]).push(a);return m},{});
+      for(const t in fld){const ns=fld[t].map(a=>+a.n);if(!ns.includes(1)||!ns.includes(2))continue; // the team with a pitcher and catcher is in the field
+        if(new Set(ns).size!==ns.length)e('two fielders share a position number');if(ns.length>9||ns.some(n=>!(n>=1&&n<=9)))e('fielders must be numbered 1-9 by position');
+        fld[t].forEach(a=>{const [,x,y]=a.k[0];if(+a.n>=7&&Math.hypot(x-100,y-127)<97)e('outfielder #'+a.n+' starts on the infield dirt (would look like an extra infielder)')})}}
     if(p.clip&&!/^https:\/\//.test(p.clip.url))e('clip url must be https');
   }
 }

@@ -54,6 +54,10 @@ Length limits (enforced by check.js): option 34 characters, stamp 16, law 60, wh
 - **pga** (metres): close-up of a green, hole at (1.0, 0.75). Typical view about 1.7 wide.
 - **lax** (yards): field x 0 to 60, end line y=0, goal line y=15 with the goal at x=30 (crease radius 3), restraining line y=35, midfield y=55.
 
+MLB fielders: number them by position (1 pitcher, 2 catcher, 3 first, 4 second, 5 third, 6 short, 7 left, 8 center, 9 right), at most one of each. Never put an outfielder (7, 8, 9) on the infield dirt at the start of a play, or it looks like a fifth infielder. If an outfielder has no part in the play, leave him out; if he does, start him on the grass at the edge of the view. `check.js` and `check-ctp.js` enforce this.
+
+Captions: the page now keeps each caption up for at least about 0.27 seconds per word plus 1 second (the play slows to match), so keep captions short; about 20 words is the most a caption should hold.
+
 Keep the ball's path clear of players it is not supposed to touch, keep every actor and label inside `view`, and keep labels away from the top-left corner (league chip) and top-right corner (Watch again button).
 
 ## Before pushing

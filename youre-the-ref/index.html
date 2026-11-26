@@ -107,10 +107,13 @@ function startGame(DAY,P){
   function dots(){$("dots").innerHTML=P.map(function(p,j){var s=res[j]===undefined?(j===i?"now":""):(res[j]?"ok":"no");return '<span class="dot '+s+'">'+p.league+'</span>'}).join("")}
   function paint(t,trail){YTR.draw(c,P[i],t,RECT,{trail:trail});var lb=P[i].league;c.font="800 24px 'Barlow Condensed', Arial, sans-serif";YTR.chip(c,lb,14+(c.measureText(lb).width+21.6)/2,32,24,"#111","#f4c430",1)}
   function run(slow){
-    cancelAnimationFrame(raf);var p=P[i],k=slow?(p.replay?0.8:0.5):0.7,t0=null,lead=slow?0:3600;
+    cancelAnimationFrame(raf);var p=P[i],k=slow?(p.replay?0.8:0.5):0.7,t0=null,words=function(s){return String(s).split(/\s+/).length},lead=slow?0:Math.max(3600,words(p.setup)*280+1500);
+    // Reading pace: each caption stays up at least ~0.27s per word + 1s, and the play slows down to match.
+    var segs=[],real=0;p.caps.forEach(function(c){var a=Math.min(c[0],p.dur),b=Math.min(c[1],p.dur);if(b<=a)return;var r=Math.max((b-a)/k,slow?0:words(c[2])*0.27+1.0);segs.push([a,b,real,real+r]);real+=r});
+    function gt(rs){for(var j=0;j<segs.length;j++){var s=segs[j];if(rs<s[3])return s[0]+(rs-s[2])/(s[3]-s[2])*(s[1]-s[0])}return p.dur}
     $("again").hidden=true; if(!slow){$("calls").innerHTML="";$("cap").className="cap";$("cap").textContent=p.setup}
     if(reduce){paint(p.dur,true);ask();return}
-    function step(now){if(t0===null)t0=now;var t=Math.max(0,(now-t0-lead)/1000)*k;
+    function step(now){if(t0===null)t0=now;var t=gt(Math.max(0,(now-t0-lead)/1000));
       if(t>=p.dur){paint(p.dur,true);if(slow)ask();else setTimeout(ask,1800);return}
       paint(t,slow);if(now-t0>=lead&&!answered){$("cap").className="cap";$("cap").textContent=YTR.capAt(p,t)||$("cap").textContent}
       raf=requestAnimationFrame(step)}

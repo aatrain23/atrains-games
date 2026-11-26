@@ -82,8 +82,7 @@
         {team: "a", n: "3", k: [[0, 150, 114], [5, 152, 112]]},
         {team: "a", n: "4", k: [[0, 128, 90], [3.4, 96.5, 59], [5, 96.5, 59]]},
         {team: "a", n: "6", k: [[0, 84, 92], [3.2, 78.5, 85], [5, 78.5, 85]]},
-        {team: "a", n: "5", k: [[0, 44, 112], [5, 42, 118]]},
-        {team: "a", n: "7", k: [[0, 48, 74], [2.6, 61, 64.5], [5, 62, 66]]}
+        {team: "a", n: "5", k: [[0, 44, 112], [5, 42, 118]]}
       ],
       ball: [[0, 100, 189], [0.3, 100, 187.5, 1], [2.2, 62, 62, 0.3, "lin"], [2.8, 62.5, 64, 1], [3.8, 77, 83, 1, "arc", 6], [5, 77, 83, 1]], marks: [{t0: 2.2, t1: 9, type: "label", x: 100, y: 216, text: "LEADOFF DOUBLE"}], options: ["Walk him intentionally", "Pitch to him"], answer: 1, stamp: "PITCH TO HIM", why: "Pitch to him. MLB.com tracked the 24 intentional walks of the 2025 playoffs. The next hitters batted .273, and a run scored in the inning about half the time. Overall the walks did nothing for the pitching team, and it calls an early one a big no-no.", law: "MLB.com · Postseason intentional walks, Oct 2025", twist: "In the real game the star was walked here, and three straight singles blew the inning open." }
 ];
