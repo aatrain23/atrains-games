@@ -67,7 +67,7 @@
         { shape: "stick", from: 1.1, k: [[1.1, 107, 186], [1.6, 108.6, 177.6]] }
       ],
       ball: [[0, 100, 131, 1.5], [0.4, 100, 131, 1.5], [1.0, 101.5, 186, 1, "lin"], [1.9, 107.4, 178.4, 0], [2.6, 104.4, 174.4, 0], [3.5, 104.4, 174.4, 0], [4.5, 159, 128.4, 1.5, "lin"], [4.8, 159, 128.4, 1]],
-      marks: [{ t0: 1.9, t1: 3.4, type: "ringAt", x: 107.6, y: 178 }, { t0: 1.9, t1: 9, type: "label", x: 80, y: 198, text: "ROLLS INTO THE BAT" }, { t0: 4.3, t1: 9, type: "label", x: 160, y: 158, text: "BEATS THE THROW" }],
+      marks: [{ t0: 1.9, t1: 3.4, type: "ringAt", x: 107.6, y: 178 }, { t0: 1.9, t1: 9, type: "label", x: 132, y: 190, text: "INTO THE BAT" }, { t0: 4.3, t1: 9, type: "label", x: 160, y: 158, text: "BEATS THE THROW" }],
       options: ["Out: the bat hit the ball twice", "Foul ball: back to the box", "Live ball: he's safe at first"], answer: 2, stamp: "LIVE BALL",
       why: "Live ball. A batter is out if his bat hits a fair ball a second time. But when he drops the bat and the ball rolls into it, and the umpire sees no intent to interfere, the ball is alive and in play.",
       law: "Official Baseball Rules · Rule 5.09(a)(8)", twist: "If he were still holding the bat when it hit the ball again in fair territory, he would be out." },
