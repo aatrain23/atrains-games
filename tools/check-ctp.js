@@ -22,7 +22,8 @@ for(const f of fs.readdirSync(dir).filter(f=>/^day-\d+\.js$/.test(f)).sort((a,b)
     if(p.sport==='mlb'){const fld=p.actors.filter(a=>!a.shape&&(a.team==='a'||a.team==='b')).reduce((m,a)=>{(m[a.team]=m[a.team]||[]).push(a);return m},{});
       for(const t in fld){const ns=fld[t].map(a=>+a.n);if(!ns.includes(1)||!ns.includes(2))continue; // the team with a pitcher and catcher is in the field
         if(new Set(ns).size!==ns.length)e('two fielders share a position number');if(ns.length>9||ns.some(n=>!(n>=1&&n<=9)))e('fielders must be numbered 1-9 by position');
-        fld[t].forEach(a=>{const [,x,y]=a.k[0];if(+a.n>=7&&Math.hypot(x-100,y-127)<97)e('outfielder #'+a.n+' starts on the infield dirt (would look like an extra infielder)')})}}
+        fld[t].forEach(a=>{const [,x,y]=a.k[0];if(+a.n>=7&&Math.hypot(x-100,y-127)<97)e('outfielder #'+a.n+' starts on the infield dirt (would look like an extra infielder)')})
+        fld[t].forEach(a=>{if(![3,4,5,6].includes(+a.n))return;a.k.forEach(k=>{const vx=k[1]-100,vy=190-k[2];if(vy-Math.abs(vx)*64/62<-1.5||Math.hypot(k[1]-100,k[2]-127)>92)e('infielder #'+a.n+' leaves the infield (foul ground or outfield grass) at t='+k[0])})})}}
     if(p.clip&&!/^https:\/\//.test(p.clip.url))e('clip url must be https');
   }
 }

@@ -119,7 +119,7 @@
     var ents = play.actors.filter(function (a) { return a.from === undefined || t >= a.from; }).map(function (a) { var p = at(a.k, t); return { a: a, x: p[0], y: p[1] }; }).sort(function (m, n) { return m.y - n.y; });
     var sunk = play.sunkAt !== undefined && t >= play.sunkAt;
     ents.forEach(function (e) {
-      var x = X(e.x), y = Y(e.y), col = e.a.team === "ref" ? "#fff" : COL[e.a.team];
+      var x = X(e.x), y = Y(e.y), lgk = e.a.team === "gk" && play.sport === "lax", col = e.a.team === "ref" ? "#fff" : lgk ? COL[play.gkTeam || "b"] : COL[e.a.team];
       if (e.a.shape) { c.save(); c.translate(x, y);
         if (e.a.shape === "stick") { var kk = e.a.k, mv = t < kk[kk.length - 1][0]; c.rotate(mv ? t * 14 : 0.7); c.lineCap = "round"; c.strokeStyle = COL.ink; c.lineWidth = PR * 0.42; c.beginPath(); c.moveTo(-PR * 1.5, 0); c.lineTo(PR * 1.5, 0); c.lineTo(PR * 1.9, PR * 0.45); c.stroke(); c.strokeStyle = "#c9a26b"; c.lineWidth = PR * 0.22; c.stroke(); }
         if (e.a.shape === "glove") { c.rotate(t * 9); c.fillStyle = "#8a5a2b"; c.beginPath(); c.ellipse(0, 0, PR * 0.75, PR * 0.6, 0, 0, TAU); c.fill(); c.lineWidth = PR * 0.16; c.strokeStyle = COL.ink; c.stroke(); c.beginPath(); c.moveTo(-PR * 0.3, -PR * 0.5); c.lineTo(-PR * 0.3, PR * 0.1); c.moveTo(PR * 0.1, -PR * 0.58); c.lineTo(PR * 0.1, PR * 0.1); c.stroke(); }
@@ -130,7 +130,7 @@
       if (e.a.team === "ref") { c.save(); c.clip(); c.fillStyle = "#111"; for (var s = -3; s < 4; s += 2) c.fillRect(x + s * PR * 0.28 - PR * 0.14, y - PR, PR * 0.28, PR * 2); c.restore(); c.beginPath(); c.arc(x, y, PR, 0, TAU); }
       c.lineWidth = PR * 0.2; c.strokeStyle = COL.ink; c.stroke();
       if (e.a.team === "ref") { c.fillStyle = "#fff"; c.beginPath(); c.arc(x, y, PR * 0.52, 0, TAU); c.fill(); }
-      c.fillStyle = e.a.team === "gk" || e.a.team === "ref" ? "#111" : "#fff"; c.font = "700 " + (PR * 0.95) + "px Barlow, Arial, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(e.a.n, x, y + PR * 0.06);
+      c.fillStyle = (e.a.team === "gk" && !lgk) || e.a.team === "ref" ? "#111" : "#fff"; c.font = "700 " + (PR * 0.95) + "px Barlow, Arial, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(e.a.n, x, y + PR * 0.06);
     });
     var bx = X(b[0]), by = Y(b[1]) - lift;
     if (!sunk) { c.fillStyle = "rgba(0,0,0,.3)"; c.beginPath(); c.ellipse(X(b[0]) + lift * 0.3, Y(b[1]) + 6 * bs, 9 * bs, 4 * bs, 0, 0, TAU); c.fill(); }

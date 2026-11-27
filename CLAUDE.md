@@ -20,7 +20,7 @@ Create `youre-the-ref/slates/day-N.js` and set `window.YTR_LATEST = N` in `youre
 Rules for every play:
 1. Pick a real, counter-intuitive or obscure rule. Never reuse a rule already used in any earlier slate (read the earlier slate files first).
 2. Verify the ruling with a web search against the league's official rulebook or official rules site before writing it. `law` must cite the rulebook and rule number you verified. If you cannot verify a ruling, pick a different rule. Never write a ruling from memory.
-3. Players are numbered circles: Blue is team `"a"`, Red is team `"b"`, goalie `"gk"`, official `"ref"`. No real player names, team names or logos in the play itself.
+3. Players are numbered circles: Blue is team `"a"`, Red is team `"b"`, goalie `"gk"`, official `"ref"`. A hockey goalie is drawn yellow; a lacrosse goalie is drawn in the defending team's color (Red by default; set `gkTeam: "a"` on the play if Blue is defending). No real player names, team names or logos in the play itself.
 4. Exactly one option is correct. Wrong options must be plausible.
 5. Plain wording a casual fan understands. No em dashes.
 6. `clip` is optional: only a real https link to the league's own site or official video rulebook showing a real example, found by search. Leave it out otherwise. Never invent a URL.
@@ -54,7 +54,7 @@ Length limits (enforced by check.js): option 34 characters, stamp 16, law 60, wh
 - **pga** (metres): close-up of a green, hole at (1.0, 0.75). Typical view about 1.7 wide.
 - **lax** (yards): field x 0 to 60, end line y=0, goal line y=15 with the goal at x=30 (crease radius 3), restraining line y=35, midfield y=55.
 
-MLB fielders: number them by position (1 pitcher, 2 catcher, 3 first, 4 second, 5 third, 6 short, 7 left, 8 center, 9 right), at most one of each. Never put an outfielder (7, 8, 9) on the infield dirt at the start of a play, or it looks like a fifth infielder. If an outfielder has no part in the play, leave him out; if he does, start him on the grass at the edge of the view. `check.js` and `check-ctp.js` enforce this.
+MLB fielders: number them by position (1 pitcher, 2 catcher, 3 first, 4 second, 5 third, 6 short, 7 left, 8 center, 9 right), at most one of each. Never put an outfielder (7, 8, 9) on the infield dirt at the start of a play, or it looks like a fifth infielder. If an outfielder has no part in the play, leave him out; if he does, start him on the grass at the edge of the view. Infielders (3, 4, 5, 6) must stay in fair territory on the infield dirt the whole play (a first baseman holding a runner stands just behind him, not out past the bag in foul ground). `check.js` and `check-ctp.js` enforce this.
 
 Captions: the page now keeps each caption up for at least about 0.27 seconds per word plus 1 second (the play slows to match), so keep captions short; about 20 words is the most a caption should hold.
 
